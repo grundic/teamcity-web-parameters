@@ -2,7 +2,8 @@
 <%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 <jsp:useBean id="context" scope="request" type="jetbrains.buildServer.controllers.parameters.ParameterRenderContext"/>
-<jsp:useBean id="options" scope="request" type="java.util.List<java.util.Map>"/>
+<jsp:useBean id="options" scope="request"
+             type="java.util.List<ru.mail.teamcity.web.patameters.controller.WebParameterController.Entry"/>
 
 <c:set var="selectedKey" value="${context.parameter.value}"/>
 <forms:select name="${context.id}" id="${context.id}" style="width:100%">
