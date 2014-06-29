@@ -1,5 +1,6 @@
 package ru.mail.teamcity.web.patameters.data;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Map;
 
@@ -9,26 +10,42 @@ import java.util.Map;
  * Time: 13:47
  */
 @XmlRootElement
-public final class Option<K, V> implements Map.Entry<K, V> {
-    private final K key;
-    private V value;
+public final class Option {
+    private final String key;
+    private String value;
+    @XmlElement(required = false, defaultValue="true")
+    private boolean enabled;
 
-    public Option(K key, V value) {
+    public Option(String key, String value) {
         this.key = key;
         this.value = value;
     }
 
-    public K getKey() {
+    public Option(String key, String value, boolean enabled) {
+        this.key = key;
+        this.value = value;
+        this.enabled = enabled;
+    }
+
+    public String getKey() {
         return key;
     }
 
-    public V getValue() {
+    public String getValue() {
         return value;
     }
 
-    public V setValue(V value) {
-        V old = this.value;
+    public String setValue(String value) {
+        String old = this.value;
         this.value = value;
         return old;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }
