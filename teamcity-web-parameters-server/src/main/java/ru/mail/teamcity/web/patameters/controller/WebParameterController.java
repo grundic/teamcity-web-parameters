@@ -1,14 +1,18 @@
 package ru.mail.teamcity.web.patameters.controller;
 
 import jetbrains.buildServer.controllers.parameters.InvalidParametersException;
+import jetbrains.buildServer.controllers.parameters.ParameterEditContext;
 import jetbrains.buildServer.controllers.parameters.ParameterRenderContext;
 import jetbrains.buildServer.controllers.parameters.api.ParameterControlProviderAdapter;
+import jetbrains.buildServer.serverSide.ControlDescription;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: g.chernyshev
@@ -42,21 +46,20 @@ public class WebParameterController extends ParameterControlProviderAdapter {
     @Override
     public ModelAndView renderControl(@NotNull HttpServletRequest request, @NotNull ParameterRenderContext context) throws InvalidParametersException {
         ModelAndView modelAndView = new ModelAndView(pluginDescriptor.getPluginResourcesPath("ru/mail/teamcity/web/parameters/jsp/webParameterControl.jsp"));
-        modelAndView.getModel().put("options", requestOptions());
+        modelAndView.getModel().put("options", requestOptions(context.getDescription()));
         return modelAndView;
     }
 
-    private List<Entry<String, String>> requestOptions() {
+    private List<Entry<String, String>> requestOptions(ControlDescription description) {
         List<Entry<String, String>> result = new ArrayList<Entry<String, String>>();
-
-
-        result.add(new Entry<String, String>("first", "first"));
-        result.add(new Entry<String, String>("second", "second"));
-        result.add(new Entry<String, String>("third", "third"));
-
         return result;
     }
 
+    @NotNull
+    @Override
+    public ModelAndView renderSpecEditor(@NotNull HttpServletRequest request, @NotNull ParameterEditContext parameterEditContext) throws InvalidParametersException {
+        return new ModelAndView(pluginDescriptor.getPluginResourcesPath("ru/mail/teamcity/web/parameters/jsp/webParameterConfiguration.jsp"));
+    }
 
     public final class Entry<K, V> implements Map.Entry<K, V> {
         private final K key;
