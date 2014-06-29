@@ -8,6 +8,7 @@ import jetbrains.buildServer.serverSide.ControlDescription;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
+import ru.mail.teamcity.web.patameters.data.Options;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -50,38 +51,14 @@ public class WebParameterController extends ParameterControlProviderAdapter {
         return modelAndView;
     }
 
-    private List<Entry<String, String>> requestOptions(ControlDescription description) {
-        List<Entry<String, String>> result = new ArrayList<Entry<String, String>>();
-        return result;
+    private Options requestOptions(ControlDescription description) {
+        Options options = new Options();
+        return options;
     }
 
     @NotNull
     @Override
     public ModelAndView renderSpecEditor(@NotNull HttpServletRequest request, @NotNull ParameterEditContext parameterEditContext) throws InvalidParametersException {
         return new ModelAndView(pluginDescriptor.getPluginResourcesPath("ru/mail/teamcity/web/parameters/jsp/webParameterConfiguration.jsp"));
-    }
-
-    public final class Entry<K, V> implements Map.Entry<K, V> {
-        private final K key;
-        private V value;
-
-        public Entry(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public K getKey() {
-            return key;
-        }
-
-        public V getValue() {
-            return value;
-        }
-
-        public V setValue(V value) {
-            V old = this.value;
-            this.value = value;
-            return old;
-        }
     }
 }
