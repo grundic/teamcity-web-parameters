@@ -2,5 +2,6 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <!--suppress SpringBeanConstructorArgInspection -->
 <beans default-autowire="constructor">
-    <bean class="ru.mail.teamcity.web.patameters.controller.WebParameterController"/>
+    <bean class="ru.mail.teamcity.web.parameters.controller.WebParameterController"/>
+    <bean class="ru.mail.teamcity.web.parameters.manager.WebOptionsManagerImpl"/>
 </beans>

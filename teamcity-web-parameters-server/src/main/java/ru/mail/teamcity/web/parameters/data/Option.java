@@ -1,8 +1,9 @@
-package ru.mail.teamcity.web.patameters.data;
+package ru.mail.teamcity.web.parameters.data;
+
+import org.jetbrains.annotations.NotNull;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Map;
 
 /**
  * User: g.chernyshev
@@ -11,40 +12,50 @@ import java.util.Map;
  */
 @XmlRootElement
 public final class Option {
-    private final String key;
+    @NotNull
+    private String key;
+    @NotNull
     private String value;
-    @XmlElement(required = false, defaultValue="true")
-    private boolean enabled;
+    private boolean enabled = true;
 
-    public Option(String key, String value) {
+    public Option() {
+        // empty constructor for JAXB
+    }
+
+    public Option(@NotNull String key, @NotNull String value) {
+        this.key = key;
+        this.value = value;
+        this.enabled = true;
+    }
+
+    public Option(@NotNull String key, @NotNull String value, boolean enabled) {
         this.key = key;
         this.value = value;
     }
 
-    public Option(String key, String value, boolean enabled) {
-        this.key = key;
-        this.value = value;
-        this.enabled = enabled;
-    }
-
+    @NotNull
     public String getKey() {
         return key;
     }
 
+    public void setKey(@NotNull String key) {
+        this.key = key;
+    }
+
+    @NotNull
     public String getValue() {
         return value;
     }
 
-    public String setValue(String value) {
-        String old = this.value;
+    public void setValue(@NotNull String value) {
         this.value = value;
-        return old;
     }
 
     public boolean isEnabled() {
         return enabled;
     }
 
+    @XmlElement(required = false)
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }

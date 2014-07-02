@@ -1,4 +1,4 @@
-package ru.mail.teamcity.web.patameters.data;
+package ru.mail.teamcity.web.parameters.data;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,6 +14,10 @@ import java.util.List;
 public class Options {
 
     private List<Option> options = new ArrayList<Option>();
+
+    public static Options empty() {
+        return new Options();
+    }
 
     @XmlElement(name = "option")
     public List<Option> getOptions() {
