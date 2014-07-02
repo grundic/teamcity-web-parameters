@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<options>
+    <option>
+        <enabled>true</enabled>
+        <value>first</value>
+        <key>first</key>
+    </option>
+    <option>
+        <value>second</value>
+        <key>second</key>
+    </option>
+    <option>
+        <enabled></enabled>
+        <value>third</value>
+        <key>third</key>
+    </option>
+    <option>
+        <enabled>0</enabled>
+        <value>fourth</value>
+        <key>fourth</key>
+    </option>
+    <option>
+        <enabled>1</enabled>
+        <value>fifth</value>
+        <key>fifth</key>
+    </option>
+</options>

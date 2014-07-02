@@ -1,0 +1,24 @@
+{
+    "options": [
+        {
+            "key": "first",
+            "value": "first",
+            "enabled": true
+        },
+        {
+            "key": "second",
+            "value": "second",
+            "enabled": true
+        },
+        {
+            "key": "third",
+            "value": "third",
+            "enabled": true
+        },
+        {
+            "key": "fourth",
+            "value": "4444",
+            "enabled": true
+        }
+    ]
+}
