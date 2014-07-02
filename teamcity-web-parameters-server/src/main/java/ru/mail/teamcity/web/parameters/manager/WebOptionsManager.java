@@ -1,9 +1,12 @@
 package ru.mail.teamcity.web.parameters.manager;
 
+import jetbrains.buildServer.serverSide.CriticalErrors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.mail.teamcity.web.parameters.data.Options;
 import ru.mail.teamcity.web.parameters.parser.OptionParser;
+
+import java.util.Map;
 
 /**
  * User: g.chernyshev
@@ -12,8 +15,8 @@ import ru.mail.teamcity.web.parameters.parser.OptionParser;
  */
 public interface WebOptionsManager {
     @NotNull
-    public Options read(@NotNull String url, @NotNull String format);
+    public Options read(@NotNull String url, @NotNull String format, @NotNull Map<String, String> errors);
 
     @Nullable
-    public OptionParser guess(@NotNull String url);
+    public OptionParser guess(@NotNull String url, @NotNull Map<String, String> errors);
 }

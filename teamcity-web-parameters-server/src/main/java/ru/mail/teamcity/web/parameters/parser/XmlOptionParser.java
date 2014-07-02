@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * User: g.chernyshev
@@ -22,13 +23,13 @@ public class XmlOptionParser implements OptionParser {
     }
 
     @Nullable
-    public Options parse(InputStream inputStream) {
+    public Options parse(InputStream inputStream, @NotNull Map<String, String> errors) {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Options.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             return unmarshaller.unmarshal(new StreamSource(inputStream), Options.class).getValue();
         } catch (JAXBException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            errors.put("Failed to parse Xml format", e.getCause().getMessage());
         }
         return null;
     }

@@ -16,6 +16,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: g.chernyshev
@@ -27,7 +29,7 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
     private final static Logger LOG = Logger.getLogger(WebOptionsManagerImpl.class);
 
     @NotNull
-    public Options read(@NotNull String url, @NotNull String format) {
+    public Options read(@NotNull String url, @NotNull String format, @NotNull Map<String, String> errors) {
         Options options = null;
 
         HttpClient httpClient = HttpClientBuilder.create().build();
@@ -35,13 +37,16 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
         LOG.debug(String.format("Requesting parameters from %s", url));
         try {
             HttpResponse response = httpClient.execute(getRequest);
-            if (response.getStatusLine().getStatusCode() != 200) {
+            int code = response.getStatusLine().getStatusCode();
+            if (code != 200) {
+                errors.put(String.format("Unexpected status code %d", code), response.getStatusLine().getReasonPhrase());
                 LOG.error("Method failed: " + response.getStatusLine());
                 return Options.empty();
             }
-            options = parse(response.getEntity().getContent(), format);
+            options = parse(response.getEntity().getContent(), format, errors);
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            errors.put("Failed to execute request", e.getMessage());
+            LOG.trace(e);
         } finally {
             getRequest.releaseConnection();
         }
@@ -49,7 +54,7 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
     }
 
     @Nullable
-    public OptionParser guess(@NotNull String url) {
+    public OptionParser guess(@NotNull String url, @NotNull Map<String, String> errors) {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet getRequest = new HttpGet(url);
         LOG.debug(String.format("Requesting parameters from %s", url));
@@ -63,18 +68,19 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             try {
                 content = IOUtils.toString(response.getEntity().getContent());
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                errors.put("Failed to convert stream to string", e.getMessage());
                 return null;
             }
             for (OptionParser parser : ParserFactory.registry) {
                 InputStream stream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
 
-                if (null != parser.parse(stream)) {
+                Map<String, String> parseErrors = new HashMap<String, String>();
+                if (null != parser.parse(stream, parseErrors)) {
                     return parser;
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            errors.put("Failed to execute request", e.getMessage());
         } finally {
             getRequest.releaseConnection();
         }
@@ -82,10 +88,10 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
     }
 
     @Nullable
-    private Options parse(@NotNull InputStream inputStream, @NotNull String format) {
+    private Options parse(@NotNull InputStream inputStream, @NotNull String format, @NotNull Map<String, String> errors) {
         OptionParser parser = ParserFactory.getOptionParser(format);
         if (null != parser) {
-            return parser.parse(inputStream);
+            return parser.parse(inputStream, errors);
         }
         return null;
     }

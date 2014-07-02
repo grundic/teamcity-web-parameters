@@ -4,17 +4,17 @@ import jetbrains.buildServer.controllers.parameters.InvalidParametersException;
 import jetbrains.buildServer.controllers.parameters.ParameterEditContext;
 import jetbrains.buildServer.controllers.parameters.ParameterRenderContext;
 import jetbrains.buildServer.controllers.parameters.api.ParameterControlProviderAdapter;
+import jetbrains.buildServer.serverSide.CriticalErrors;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
 import ru.mail.teamcity.web.parameters.data.Options;
 import ru.mail.teamcity.web.parameters.manager.WebOptionsManager;
-import ru.mail.teamcity.web.parameters.parser.OptionParser;
 import ru.mail.teamcity.web.parameters.parser.ParserFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * User: g.chernyshev
@@ -27,13 +27,17 @@ public class WebParameterController extends ParameterControlProviderAdapter {
     private final PluginDescriptor pluginDescriptor;
     @NotNull
     private final WebOptionsManager webOptionsManager;
+    @NotNull
+    private final Map<String, String> errors;
 
 
     public WebParameterController(
             @NotNull PluginDescriptor pluginDescriptor,
-            @NotNull WebOptionsManager webOptionsManager) {
+            @NotNull WebOptionsManager webOptionsManager
+    ) {
         this.pluginDescriptor = pluginDescriptor;
         this.webOptionsManager = webOptionsManager;
+        this.errors = new HashMap<String, String>();
     }
 
     @NotNull
@@ -56,8 +60,10 @@ public class WebParameterController extends ParameterControlProviderAdapter {
         String url = context.getDescription().getParameterTypeArguments().get("url");
         String format = context.getDescription().getParameterTypeArguments().get("format");
 
-        Options options = webOptionsManager.read(url, format);
+        errors.clear();
+        Options options = webOptionsManager.read(url, format, errors);
         modelAndView.getModel().put("options", options);
+        modelAndView.getModel().put("errors", errors);
         return modelAndView;
     }
 

@@ -1,10 +1,12 @@
 package ru.mail.teamcity.web.parameters.parser;
 
+import jetbrains.buildServer.serverSide.CriticalErrors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.mail.teamcity.web.parameters.data.Options;
 
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * User: g.chernyshev
@@ -16,5 +18,5 @@ public interface OptionParser {
     public String getId();
 
     @Nullable
-    public Options parse(InputStream inputStream);
+    public Options parse(InputStream inputStream, @NotNull Map<String, String> errors);
 }
