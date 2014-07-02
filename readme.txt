@@ -13,3 +13,4 @@
  To install the plugin, put zip archive to 'plugins' dir under TeamCity data directory and restart the server.
 
  
+mvn install:install-file -Dfile=<TEAMCITY_ROOT>\webapps\ROOT\WEB-INF\lib\web.jar -DgroupId=org.jetbrains.teamcity -DartifactId=web -Dversion=8.0 -Dpackaging=jar

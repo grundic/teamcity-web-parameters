@@ -11,8 +11,8 @@
     <packaging>pom</packaging>
     <properties>
         <maven.build.timestamp.format>yyyyddMMHHmmss</maven.build.timestamp.format>
-        <pluginLocation>/Users/grundic/work/Teamcity/PluginDev.Data</pluginLocation>
-        <!--<pluginLocation>F:\Teamcity\PluginDev.Data</pluginLocation>-->
+        <!--<pluginLocation>/Users/grundic/work/Teamcity/PluginDev.Data</pluginLocation>-->
+        <pluginLocation>F:\Teamcity\PluginDev.Data</pluginLocation>
     </properties>
     <dependencies>
         <dependency>
