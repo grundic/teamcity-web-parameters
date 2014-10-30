@@ -45,7 +45,7 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             }
             options = parse(response.getEntity().getContent(), format, errors);
         } catch (IOException e) {
-            errors.put("Failed to execute request", e.getMessage());
+            errors.put("Failed to execute request", e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
             LOG.trace(e);
         } finally {
             getRequest.releaseConnection();
