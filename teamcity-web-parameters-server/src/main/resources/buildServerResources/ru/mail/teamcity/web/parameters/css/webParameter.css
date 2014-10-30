@@ -1,0 +1,11 @@
+.web-param-error {
+    background-color: #F50000;
+    color: #D9D9D9;
+    width: 100%;
+    border: 2px solid;
+    padding: 10px
+}
+
+.web-param-error h3 {
+    color: #000000
+}

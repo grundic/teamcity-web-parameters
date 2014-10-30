@@ -1,9 +1,12 @@
+<%@ include file="/include.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="bs" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 <jsp:useBean id="context" scope="request" type="jetbrains.buildServer.controllers.parameters.ParameterRenderContext"/>
 <jsp:useBean id="options" scope="request" type="ru.mail.teamcity.web.parameters.data.Options"/>
 <jsp:useBean id="errors" scope="request" type="java.util.Map<java.lang.String, java.lang.String>"/>
+
+<link rel="stylesheet" type="text/css" href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/webParameter.css">
 
 <c:choose>
     <c:when test="${empty errors}">
@@ -19,10 +22,10 @@
     </c:when>
 
     <c:otherwise>
-        <div style="background-color: #F50000;color: #D9D9D9; width:100%; border-radius: 15px; border: 2px solid;">
+        <div class="web-param-error">
             <c:forEach var="error" items="${errors}">
-                <h4>${error.key}:</h4>
-                <h4>${error.value}</h4>
+                <h3>${error.key}</h3>
+                <span>${error.value}</span>
             </c:forEach>
         </div>
     </c:otherwise>
