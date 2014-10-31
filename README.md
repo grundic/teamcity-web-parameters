@@ -56,5 +56,5 @@ In `URL` option enter url of your web service. For our aforementioned python exa
 
 License
 -------
-[MIT](LICENCE)
+[MIT](https://github.com/grundic/teamcity-web-parameters/blob/master/LICENSE)
 
