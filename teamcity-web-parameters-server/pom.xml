@@ -56,12 +56,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.jetbrains.teamcity</groupId>
             <artifactId>tests-support</artifactId>
             <version>${teamcity-version}</version>

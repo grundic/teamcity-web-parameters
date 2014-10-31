@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>teamcity-web-parameters</artifactId>
         <groupId>ru.mail.teamcity</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <artifactId>build</artifactId>
     <packaging>pom</packaging>
     <properties>
         <maven.build.timestamp.format>yyyyddMMHHmmss</maven.build.timestamp.format>
+        <pluginLocation>/opt/jetbrains/PluginDev.Data</pluginLocation>
+        <!--<pluginLocation>${env.PLUGINDEV_DATA}</pluginLocation>-->
         <!--<pluginLocation>/Users/grundic/work/Teamcity/PluginDev.Data</pluginLocation>-->
-        <pluginLocation>F:\Teamcity\PluginDev.Data</pluginLocation>
+        <!--<pluginLocation>F:\Teamcity\PluginDev.Data</pluginLocation>-->
+        <plugin.final.name>${project.parent.artifactId}-${project.version}</plugin.final.name>
     </properties>
     <dependencies>
         <dependency>
@@ -41,7 +44,7 @@
                     <replacements>
                         <replacement>
                             <token>@Version@</token>
-                            <value>snapshot-${maven.build.timestamp}</value>
+                            <value>${project.version}</value>
                         </replacement>
                     </replacements>
                 </configuration>
@@ -57,7 +60,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>teamcity-web-parameters</finalName>
+                            <finalName>${plugin.final.name}</finalName>
                             <outputDirectory>${project.parent.build.directory}</outputDirectory>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
@@ -75,8 +78,8 @@
                         <configuration>
                             <tasks>
                                 <copy
-                                        file="${project.parent.build.directory}/${parent.artifactId}.zip"
-                                        tofile="${pluginLocation}/plugins/${parent.artifactId}.zip"
+                                        file="${project.parent.build.directory}/${plugin.final.name}.zip"
+                                        tofile="${pluginLocation}/plugins/${plugin.final.name}.zip"
                                         />
                             </tasks>
                         </configuration>
