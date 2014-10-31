@@ -1,6 +1,5 @@
 package ru.mail.teamcity.web.parameters.manager;
 
-import jetbrains.buildServer.serverSide.CriticalErrors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.mail.teamcity.web.parameters.data.Options;

@@ -17,7 +17,6 @@ public class ParserFactory {
     }};
 
 
-
     @Nullable
     public static OptionParser getOptionParser(@NotNull String format) {
         for (OptionParser parser : registry) {

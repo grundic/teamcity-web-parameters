@@ -6,7 +6,8 @@
 <jsp:useBean id="options" scope="request" type="ru.mail.teamcity.web.parameters.data.Options"/>
 <jsp:useBean id="errors" scope="request" type="java.util.Map<java.lang.String, java.lang.String>"/>
 
-<link rel="stylesheet" type="text/css" href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/webParameter.css">
+<link rel="stylesheet" type="text/css"
+      href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/webParameter.css">
 
 <c:choose>
     <c:when test="${empty errors}">
