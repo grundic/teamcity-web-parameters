@@ -11,10 +11,10 @@
 <c:choose>
     <c:when test="${empty errors}">
         <c:set var="selectedKey" value="${context.parameter.value}"/>
-        <forms:select name="${context.id}" id="${context.id}" style="width:100%">
+        <forms:select name="${context.id}" id="${context.id}" enableFilter="true" style="width:100%">
             <c:forEach var="option" items="${options.options}">
                 <c:set var="selected" value="${option.key eq selectedKey}"/>
-                <forms:option value="${option.key}" selected="${selected}">
+                <forms:option value="${option.key}" selected="${selected}" disabled="${not option.enabled}">
                     <c:out value="${option.value}"/>
                 </forms:option>
             </c:forEach>
