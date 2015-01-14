@@ -58,10 +58,17 @@ public class WebParameterController extends ParameterControlProviderAdapter {
 
         String url = context.getDescription().getParameterTypeArguments().get("url");
         String format = context.getDescription().getParameterTypeArguments().get("format");
+        Boolean enableEditOnError;
+        if (context.getDescription().getParameterTypeArguments().containsKey("enableEditOnError")) {
+            enableEditOnError = context.getDescription().getParameterTypeArguments().get("enableEditOnError").equalsIgnoreCase("true") ? true : false;
+        } else {
+            enableEditOnError = false;
+        }
 
         errors.clear();
         Options options = webOptionsManager.read(url, format, errors);
         modelAndView.getModel().put("options", options);
+        modelAndView.getModel().put("enableEditOnError", enableEditOnError);
         modelAndView.getModel().put("errors", errors);
         return modelAndView;
     }

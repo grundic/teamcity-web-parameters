@@ -5,13 +5,13 @@
     <parent>
         <artifactId>teamcity-web-parameters</artifactId>
         <groupId>ru.mail.teamcity</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
     <artifactId>build</artifactId>
     <packaging>pom</packaging>
     <properties>
         <maven.build.timestamp.format>yyyyddMMHHmmss</maven.build.timestamp.format>
-        <pluginLocation>/opt/jetbrains/PluginDev.Data</pluginLocation>
+        <pluginLocation>/opt/jetbrains/TeamCity/PluginDev.Data.8.1.3/</pluginLocation>
         <!--<pluginLocation>${env.PLUGINDEV_DATA}</pluginLocation>-->
         <!--<pluginLocation>/Users/grundic/work/Teamcity/PluginDev.Data</pluginLocation>-->
         <!--<pluginLocation>F:\Teamcity\PluginDev.Data</pluginLocation>-->
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>ru.mail.teamcity</groupId>
             <artifactId>teamcity-web-parameters-server</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.1</version>
         </dependency>
     </dependencies>
     <build>

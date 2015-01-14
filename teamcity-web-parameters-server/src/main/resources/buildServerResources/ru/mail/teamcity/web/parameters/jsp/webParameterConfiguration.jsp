@@ -27,3 +27,13 @@
         </c:forEach>
     </td>
 </tr>
+
+<tr>
+    <th><label for="enableEditOnError">Enable edit on error:<l:star/></label></th>
+    <td>
+        <props:checkboxProperty name="enableEditOnError"/>
+    <span class="smallNote">
+      Enable manual edit in case of web service is not available
+    </span>
+    </td>
+</tr>

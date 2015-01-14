@@ -5,7 +5,7 @@
     <parent>
         <artifactId>teamcity-web-parameters</artifactId>
         <groupId>ru.mail.teamcity</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1</version>
     </parent>
     <artifactId>teamcity-web-parameters-server</artifactId>
     <packaging>jar</packaging>
