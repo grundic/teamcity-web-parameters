@@ -1,0 +1,87 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+ext {
+    teamCityVersion = '9.0.1'
+    localProperties = new Properties()
+    localProperties.load(new FileInputStream("${rootDir}/local.properties"))
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    group = 'ru.mail.teamcity'
+    version = '1.2.0'
+
+    configurations {
+        provided
+    }
+
+    sourceSets {
+        main { compileClasspath += [configurations.provided] }
+    }
+
+    idea {
+        module {
+            scopes.PROVIDED.plus += [configurations.provided]
+        }
+    }
+
+    repositories {
+        mavenCentral()
+        maven {
+            url "http://repository.jetbrains.com/all"
+        }
+        mavenLocal()
+    }
+}
+
+project(':teamcity-web-parameters-server') {
+    dependencies {
+        provided "org.jetbrains.teamcity:server-api:$teamCityVersion"
+        provided "org.jetbrains.teamcity:web:$teamCityVersion"
+        testRuntime "org.jetbrains.teamcity:tests-support:$teamCityVersion"
+
+        compile "org.apache.httpcomponents:httpclient:4.3.4"
+        compile "com.fasterxml.jackson.core:jackson-core:2.2.2"
+        compile "com.fasterxml.jackson.core:jackson-databind:2.2.2"
+        compile "com.fasterxml.jackson.core:jackson-annotations:2.2.2"
+        compile "com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.4.1"
+    }
+
+    task createPluginBundle(type: Zip, dependsOn: build) {
+        from("${rootDir}/teamcity-plugin.xml") {
+            filter(ReplaceTokens, tokens: [Version: project.version])
+        }
+
+        baseName = "teamcity-web-parameters"
+
+        from(jar) {
+            into 'server'
+        }
+
+        configurations.compile.resolvedConfiguration.firstLevelModuleDependencies.each {
+            it.allModuleArtifacts.each {
+                from(it.getFile().getPath()) {
+                    into 'server'
+                }
+            }
+        }
+    }
+
+    task copyPluginBundle(type: Copy, dependsOn: createPluginBundle) {
+        def teamcityDataPath = localProperties.get("teamcityDataPath")
+        if (null == teamcityDataPath) {
+            logger.error('Please, configure location of Teamcity data directory.')
+            return
+        }
+
+        from "${buildDir}/distributions"
+        into "${teamcityDataPath}/plugins"
+        include "*.zip"
+    }
+}
+
+dependencies {
+    compile project(':teamcity-web-parameters-server')
+}

@@ -1,4 +1,21 @@
-target
-.idea
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+classes/
+.gradle/
+build/
+out/
+target/
 *.iml
+*.ipr
+*.iws
+teamcitydist/
+*.tar.gz
+
+.idea
 .DS_Store
+local.properties
