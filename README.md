@@ -11,7 +11,7 @@ With this plugin you can make your builds more flexible, because of dynamic para
 
 Installation
 -------------
-To install plugin [download zip archive](https://bintray.com/grundic/generic/teamcity-web-parameters/view/files) it and copy it to Teamcity <data directory>/plugins. For more information, take a look at [official documentation](https://confluence.jetbrains.com/display/TCD8/Installing+Additional+Plugins)
+To install plugin [download zip archive](https://github.com/grundic/teamcity-web-parameters/releases/latest) it and copy it to Teamcity <data directory>/plugins. For more information, take a look at [official documentation](https://confluence.jetbrains.com/display/TCD8/Installing+Additional+Plugins)
 
 Web-service
 -----------
