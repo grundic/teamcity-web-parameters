@@ -16,8 +16,8 @@
         <forms:select name="${context.id}" id="${context.id}" enableFilter="true" style="width:100%">
             <c:forEach var="option" items="${options.options}">
                 <c:set var="selected" value="${option.key eq selectedKey}"/>
-                <forms:option value="${option.key}" selected="${selected}" disabled="${not option.enabled}">
-                    <c:out value="${option.value}"/>
+                <forms:option value="${option.value}" selected="${selected}" disabled="${not option.enabled}">
+                    <c:out value="${option.key}"/>
                 </forms:option>
             </c:forEach>
         </forms:select>
