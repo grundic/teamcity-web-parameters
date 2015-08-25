@@ -1,24 +1,30 @@
 {
     "options": [
         {
-            "key": "first",
-            "value": "first",
+            "key": "First item",
+            "value": "100",
             "enabled": true
         },
         {
-            "key": "second",
-            "value": "second",
+            "key": "Second item",
+            "value": "200",
             "enabled": true
         },
         {
-            "key": "third",
-            "value": "third",
-            "enabled": true
+            "key": "Third item",
+            "value": "300",
+            "enabled": false
         },
         {
-            "key": "fourth",
-            "value": "4444",
+            "key": "Fourth item",
+            "value": "400",
+            "enabled": 0
+        },
+        {
+            "key": "Fifth item",
+            "value": "500",
             "enabled": true
         }
+
     ]
 }

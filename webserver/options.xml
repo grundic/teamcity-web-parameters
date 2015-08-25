@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <options>
     <option>
+        <key>First item</key>
+        <value>100</value>
         <enabled>true</enabled>
-        <value>first</value>
-        <key>first</key>
     </option>
     <option>
-        <value>second</value>
-        <key>second</key>
+        <key>Second item</key>
+        <value>200</value>
     </option>
     <option>
+        <key>Third item</key>
+        <value>300</value>
         <enabled></enabled>
-        <value>third</value>
-        <key>third</key>
     </option>
     <option>
-        <enabled>0</enabled>
+        <key>Fourth item</key>
         <value>fourth</value>
-        <key>fourth</key>
+        <enabled>0</enabled>
     </option>
     <option>
+        <key>Fifth item</key>
+        <value>500</value>
         <enabled>1</enabled>
-        <value>fifth</value>
-        <key>fifth</key>
     </option>
 </options>
