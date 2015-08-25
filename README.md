@@ -1,7 +1,7 @@
 Teamcity web parameters
 =======================
 Web-parameters is plugin for JetBrains Teamcity server, that extends default dropdown box with parameters populated from web service.
-With this plugin you can make your builds more flexible. For example, you can populate options from
+With this plugin you can make your builds more flexible, because of dynamic parameter. For example, you can populate options from
   - database query
   - VCS listing (folder, tag)
   - LDAP
@@ -21,25 +21,31 @@ For testing purposes, there is `webserver` directory, with sample files. Here is
 {
     "options": [
         {
-            "key": "first",
-            "value": "first",
+            "key": "First item",
+            "value": "100",
             "enabled": true
         },
         {
-            "key": "second",
-            "value": "second",
+            "key": "Second item",
+            "value": "200",
             "enabled": true
         },
         {
-            "key": "third",
-            "value": "third",
-            "enabled": true
+            "key": "Third item",
+            "value": "300",
+            "enabled": false
         },
         {
-            "key": "fourth",
-            "value": "4444",
+            "key": "Fourth item",
+            "value": "400",
+            "enabled": 0
+        },
+        {
+            "key": "Fifth item",
+            "value": "500",
             "enabled": true
         }
+
     ]
 }
 ```
@@ -55,6 +61,8 @@ Open build configuration and navigate to `Parameters` settings. Click `Add new p
 Select `Web populated select` in `Type` option (if you don't see such an option, make sure you have installed plugin correctly and Teamcity loaded if without errors).
 In `URL` option enter url of your web service. For our aforementioned python example it should be ```http://localhost:8099/options.json```.
 `Response format` should be selected either `xml` if your web service produces xml data or `json` in case of json. For testing configuration select json.
+If you wish, you could select `Prompt` in Display option -- this would show dialog box with specific parameter (this is default configuration option of TeamCity).
+After that you can run build as usual and use dynamic parameters, enjoyning seamless build configuration.
 
 License
 -------
