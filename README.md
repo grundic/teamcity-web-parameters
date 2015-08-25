@@ -7,6 +7,8 @@ With this plugin you can make your builds more flexible. For example, you can po
   - LDAP
   - name your own
 
+![demo](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/teamcity-web-parameters.gif?raw=true)
+
 Installation
 -------------
 To install plugin [download zip archive](https://bintray.com/grundic/generic/teamcity-web-parameters/view/files) it and copy it to Teamcity <data directory>/plugins. For more information, take a look at [official documentation](https://confluence.jetbrains.com/display/TCD8/Installing+Additional+Plugins)
