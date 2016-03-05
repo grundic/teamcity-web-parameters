@@ -13,7 +13,8 @@
         {
             "key": "Third item",
             "value": "300",
-            "enabled": false
+            "enabled": false,
+            "default": true
         },
         {
             "key": "Fourth item",
@@ -23,7 +24,8 @@
         {
             "key": "Fifth item",
             "value": "500",
-            "enabled": true
+            "enabled": true,
+            "default": true
         }
 
     ]

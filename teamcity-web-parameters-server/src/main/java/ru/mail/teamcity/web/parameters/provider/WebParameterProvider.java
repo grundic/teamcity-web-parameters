@@ -1,4 +1,4 @@
-package ru.mail.teamcity.web.parameters.controller;
+package ru.mail.teamcity.web.parameters.provider;
 
 import jetbrains.buildServer.controllers.parameters.InvalidParametersException;
 import jetbrains.buildServer.controllers.parameters.ParameterEditContext;
@@ -20,7 +20,7 @@ import java.util.Map;
  * Date: 27.06.14
  * Time: 17:51
  */
-public class WebParameterController extends ParameterControlProviderAdapter {
+public class WebParameterProvider extends ParameterControlProviderAdapter {
 
     @NotNull
     public final static String PARAMETER_TYPE = "webPopulatedSelect";
@@ -37,13 +37,13 @@ public class WebParameterController extends ParameterControlProviderAdapter {
     private final Map<String, String> errors;
 
 
-    public WebParameterController(
+    public WebParameterProvider(
             @NotNull PluginDescriptor pluginDescriptor,
             @NotNull WebOptionsManager webOptionsManager
     ) {
         this.pluginDescriptor = pluginDescriptor;
         this.webOptionsManager = webOptionsManager;
-        this.errors = new HashMap<String, String>();
+        this.errors = new HashMap<>();
     }
 
     @NotNull

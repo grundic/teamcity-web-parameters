@@ -17,6 +17,7 @@ public final class Option {
     @NotNull
     private String value;
     private boolean enabled = true;
+    private boolean isDefault = false;
 
     public Option() {
         // empty constructor for JAXB
@@ -58,5 +59,13 @@ public final class Option {
     @XmlElement(required = false)
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
     }
 }
