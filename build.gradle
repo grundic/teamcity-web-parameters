@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 ext {
-    teamCityVersion = '9.0.1'
+    teamCityVersion = '9.1.6'
     localProperties = new Properties()
     localProperties.load(new FileInputStream("${rootDir}/local.properties"))
 }
@@ -39,7 +39,14 @@ allprojects {
 project(':teamcity-web-parameters-server') {
     dependencies {
         provided "org.jetbrains.teamcity:server-api:$teamCityVersion"
+        /* This dependency is not provided by JetBrains,
+         * so you have to install it manually from TeamCity distribution
+         * in order to be able to build plugin:
+         *
+         * mvn install:install-file -Dfile=webapps/ROOT/WEB-INF/lib/web.jar -DgroupId=org.jetbrains.teamcity -DartifactId=web -Dversion=9.1.6 -Dpackaging=jar
+         */
         provided "org.jetbrains.teamcity:web:$teamCityVersion"
+        provided "org.jetbrains.teamcity:server:$teamCityVersion"
         testRuntime "org.jetbrains.teamcity:tests-support:$teamCityVersion"
 
         compile "org.apache.httpcomponents:httpclient:4.3.4"
