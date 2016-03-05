@@ -23,6 +23,13 @@ import java.util.Map;
 public class WebParameterController extends ParameterControlProviderAdapter {
 
     @NotNull
+    public final static String PARAMETER_TYPE = "webPopulatedSelect";
+    @NotNull
+    public final static String URL_PARAMETER = "url";
+    public final static String FORMAT_PARAMETER = "format";
+    public final static String ENABLE_EDIT_ON_ERROR_PARAMETER = "enableEditOnError";
+
+    @NotNull
     private final PluginDescriptor pluginDescriptor;
     @NotNull
     private final WebOptionsManager webOptionsManager;
@@ -42,7 +49,7 @@ public class WebParameterController extends ParameterControlProviderAdapter {
     @NotNull
     @Override
     public String getParameterType() {
-        return "webPopulatedSelect";
+        return PARAMETER_TYPE;
     }
 
     @NotNull
@@ -56,19 +63,17 @@ public class WebParameterController extends ParameterControlProviderAdapter {
     public ModelAndView renderControl(@NotNull HttpServletRequest request, @NotNull ParameterRenderContext context) throws InvalidParametersException {
         ModelAndView modelAndView = new ModelAndView(pluginDescriptor.getPluginResourcesPath("ru/mail/teamcity/web/parameters/jsp/webParameterControl.jsp"));
 
-        String url = context.getDescription().getParameterTypeArguments().get("url");
-        String format = context.getDescription().getParameterTypeArguments().get("format");
+        Map<String, String> config = context.getDescription().getParameterTypeArguments();
+
+        String url = config.get(URL_PARAMETER);
+        String format = config.get(FORMAT_PARAMETER);
         Boolean enableEditOnError;
-        if (context.getDescription().getParameterTypeArguments().containsKey("enableEditOnError")) {
-            enableEditOnError = context.getDescription().getParameterTypeArguments().get("enableEditOnError").equalsIgnoreCase("true") ? true : false;
-        } else {
-            enableEditOnError = false;
-        }
+        enableEditOnError = config.containsKey(ENABLE_EDIT_ON_ERROR_PARAMETER) && config.get(ENABLE_EDIT_ON_ERROR_PARAMETER).equalsIgnoreCase("true");
 
         errors.clear();
         Options options = webOptionsManager.read(url, format, errors);
         modelAndView.getModel().put("options", options);
-        modelAndView.getModel().put("enableEditOnError", enableEditOnError);
+        modelAndView.getModel().put(ENABLE_EDIT_ON_ERROR_PARAMETER, enableEditOnError);
         modelAndView.getModel().put("errors", errors);
         return modelAndView;
     }
