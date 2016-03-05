@@ -3,6 +3,7 @@ package ru.mail.teamcity.web.parameters.manager;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.log4j.Logger;
@@ -27,13 +28,17 @@ import java.util.Map;
 public class WebOptionsManagerImpl implements WebOptionsManager {
 
     private final static Logger LOG = Logger.getLogger(WebOptionsManagerImpl.class);
+    private final static int DEFAULT_TIMEOUT = 1*60*1000;
 
     @NotNull
     public Options read(@NotNull String url, @NotNull String format, @NotNull Map<String, String> errors) {
         Options options = null;
 
         HttpClient httpClient = HttpClientBuilder.create().build();
+
         HttpGet getRequest = new HttpGet(url);
+        final RequestConfig params = RequestConfig.custom().setConnectTimeout(DEFAULT_TIMEOUT).setSocketTimeout(DEFAULT_TIMEOUT).build();
+        getRequest.setConfig(params);
         LOG.debug(String.format("Requesting parameters from %s", url));
         try {
             HttpResponse response = httpClient.execute(getRequest);
@@ -74,7 +79,7 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             for (OptionParser parser : ParserFactory.registry) {
                 InputStream stream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
 
-                Map<String, String> parseErrors = new HashMap<String, String>();
+                Map<String, String> parseErrors = new HashMap<>();
                 if (null != parser.parse(stream, parseErrors)) {
                     return parser;
                 }
