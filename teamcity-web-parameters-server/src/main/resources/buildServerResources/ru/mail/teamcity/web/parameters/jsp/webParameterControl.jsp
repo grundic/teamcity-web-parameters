@@ -9,18 +9,57 @@
 
 <link rel="stylesheet" type="text/css"
       href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/webParameter.css">
+<link rel="stylesheet" type="text/css"
+      href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/select2.min.css">
+
+<script type="text/javascript">
+    function addScript( src,callback) {
+        var s = document.createElement( 'script' );
+        s.setAttribute( 'src', src );
+        s.onload=callback;
+        document.body.appendChild( s );
+    }
+
+    function addOptionImage(opt){
+        if (!opt.id) {
+            return opt.text;
+        }
+        var optimage = $j(opt.element).data('image');
+        if(!optimage){
+            return opt.text;
+        } else {
+            var $opt = $j(
+                    '<span><img src="' + optimage + '" /> ' + $j(opt.element).text() + '</span>'
+            );
+            return $opt;
+        }
+    }
+
+    $j(document).ready(function ($) {
+        addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/select2.min.js", function(){
+            $j("#${context.id}").select2({
+                templateResult: addOptionImage,
+                templateSelection: addOptionImage
+            });
+        });
+    });
+</script>
 
 <c:choose>
     <c:when test="${empty errors}">
         <c:set var="selectedKey" value="${context.parameter.value}"/>
-        <forms:select name="${context.id}" id="${context.id}" enableFilter="true" style="width:100%">
+        <select name="${context.id}" id="${context.id}" style="width:100%;">
             <c:forEach var="option" items="${options.options}">
-                <c:set var="selected" value="${option.key eq selectedKey}"/>
-                <forms:option value="${option.value}" selected="${selected}" disabled="${not option.enabled}">
+                <option
+                        value="${option.value}"
+                        <c:if test="${option.key eq selectedKey}">selected</c:if>
+                        <c:if test="${not option.enabled}">disabled</c:if>
+                        <c:if test="${not empty option.image}">data-image="${option.image}"</c:if>
+                >
                     <c:out value="${option.key}"/>
-                </forms:option>
+                </option>
             </c:forEach>
-        </forms:select>
+        </select>
     </c:when>
 
     <c:otherwise>
@@ -42,7 +81,7 @@
                         noAutoComplete="true"
                         className="buildTypeParams"
                         expandable="true"
-                        />
+                />
             </div>
         </c:if>
 

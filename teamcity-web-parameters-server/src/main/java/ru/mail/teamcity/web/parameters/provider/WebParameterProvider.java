@@ -1,6 +1,7 @@
 package ru.mail.teamcity.web.parameters.provider;
 
 import jetbrains.buildServer.controllers.parameters.InvalidParametersException;
+import jetbrains.buildServer.controllers.parameters.ParameterContextFactory;
 import jetbrains.buildServer.controllers.parameters.ParameterEditContext;
 import jetbrains.buildServer.controllers.parameters.ParameterRenderContext;
 import jetbrains.buildServer.controllers.parameters.api.ParameterControlProviderAdapter;
@@ -64,6 +65,11 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
         ModelAndView modelAndView = new ModelAndView(pluginDescriptor.getPluginResourcesPath("ru/mail/teamcity/web/parameters/jsp/webParameterControl.jsp"));
 
         Map<String, String> config = context.getDescription().getParameterTypeArguments();
+
+
+
+
+        //((ParameterContextFactory.ParameterRenderContextBase) context).myParameters;
 
         String url = config.get(URL_PARAMETER);
         String format = config.get(FORMAT_PARAMETER);

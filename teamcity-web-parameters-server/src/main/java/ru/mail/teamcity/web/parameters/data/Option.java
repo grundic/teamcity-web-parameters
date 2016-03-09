@@ -1,6 +1,7 @@
 package ru.mail.teamcity.web.parameters.data;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -18,6 +19,8 @@ public final class Option {
     private String value;
     private boolean enabled = true;
     private boolean isDefault = false;
+    @Nullable
+    private String image;
 
     public Option() {
         // empty constructor for JAXB
@@ -67,5 +70,14 @@ public final class Option {
 
     public void setDefault(boolean aDefault) {
         isDefault = aDefault;
+    }
+
+    @Nullable
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(@Nullable String image) {
+        this.image = image;
     }
 }
