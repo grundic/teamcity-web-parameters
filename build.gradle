@@ -59,7 +59,8 @@ teamcity {
 
     downloadDir = "${teamcityDir}/_downloads"
 
-    descriptor = file("$rootDir/src/main/resources/META-INF/build-server-plugin-teamcity-web-parameters.xml")
+    descriptor = file("teamcity-plugin.xml")
+    tokens = [Version: project.version]
 
     environments {
         teamcity81 {
