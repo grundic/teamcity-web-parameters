@@ -1,94 +1,87 @@
-import org.apache.tools.ant.filters.ReplaceTokens
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath group: 'com.github.rodm', name: 'gradle-teamcity-plugin', version: '0.8.3'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.rodm.teamcity-server'
+
+group = 'ru.mail.teamcity'
+version = '1.2.0'
+
+repositories {
+    maven {
+        url "http://repository.jetbrains.com/all"
+    }
+    mavenLocal()
+}
 
 ext {
-    teamCityVersion = '9.1.6'
-    localProperties = new Properties()
-    localProperties.load(new FileInputStream("${rootDir}/local.properties"))
+    teamcityVersion = '9.1.6'
+    teamcityDir = "${System.properties['user.home']}/.teamcity.d"
+    java8Home = project.hasProperty('java8.home') ? property('java8.home') : '/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home'
 }
 
-allprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-
-    group = 'ru.mail.teamcity'
-    version = '1.2.0'
-
-    configurations {
-        provided
-    }
-
-    sourceSets {
-        main { compileClasspath += [configurations.provided] }
-    }
-
-    idea {
-        module {
-            scopes.PROVIDED.plus += [configurations.provided]
-        }
-    }
-
-    repositories {
-        mavenCentral()
-        maven {
-            url "http://repository.jetbrains.com/all"
-        }
-        mavenLocal()
-    }
-}
-
-project(':teamcity-web-parameters-server') {
-    dependencies {
-        provided "org.jetbrains.teamcity:server-api:$teamCityVersion"
-        /* This dependency is not provided by JetBrains,
-         * so you have to install it manually from TeamCity distribution
-         * in order to be able to build plugin:
-         *
-         * mvn install:install-file -Dfile=webapps/ROOT/WEB-INF/lib/web.jar -DgroupId=org.jetbrains.teamcity -DartifactId=web -Dversion=9.1.6 -Dpackaging=jar
-         */
-        provided "org.jetbrains.teamcity:web:$teamCityVersion"
-        provided "org.jetbrains.teamcity:server:$teamCityVersion"
-        testRuntime "org.jetbrains.teamcity:tests-support:$teamCityVersion"
-
-        compile "org.apache.httpcomponents:httpclient:4.3.4"
-        compile "com.fasterxml.jackson.core:jackson-core:2.2.2"
-        compile "com.fasterxml.jackson.core:jackson-databind:2.2.2"
-        compile "com.fasterxml.jackson.core:jackson-annotations:2.2.2"
-        compile "com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.4.1"
-    }
-
-    task createPluginBundle(type: Zip, dependsOn: build) {
-        from("${rootDir}/teamcity-plugin.xml") {
-            filter(ReplaceTokens, tokens: [Version: project.version])
-        }
-
-        baseName = "teamcity-web-parameters"
-
-        from(jar) {
-            into 'server'
-        }
-
-        configurations.compile.resolvedConfiguration.firstLevelModuleDependencies.each {
-            it.allModuleArtifacts.each {
-                from(it.getFile().getPath()) {
-                    into 'server'
-                }
-            }
-        }
-    }
-
-    task copyPluginBundle(type: Copy, dependsOn: createPluginBundle) {
-        def teamcityDataPath = localProperties.get("teamcityDataPath")
-        if (null == teamcityDataPath) {
-            logger.error('Please, configure location of Teamcity data directory.')
-            return
-        }
-
-        from "${buildDir}/distributions"
-        into "${teamcityDataPath}/plugins"
-        include "*.zip"
-    }
+test {
+    useTestNG()
 }
 
 dependencies {
-    compile project(':teamcity-web-parameters-server')
+    provided "org.jetbrains.teamcity:server-api:$teamcityVersion"
+    /* This dependency is not provided by JetBrains,
+     * so you have to install it manually from TeamCity distribution
+     * in order to be able to build plugin:
+     *
+     * mvn install:install-file -Dfile=webapps/ROOT/WEB-INF/lib/web.jar\
+     * -DgroupId=org.jetbrains.teamcity -DartifactId=web -Dversion=9.1.6 -Dpackaging=jar
+     */
+    provided "org.jetbrains.teamcity:web:$teamcityVersion"
+    provided "org.jetbrains.teamcity:server:$teamcityVersion"
+    testRuntime "org.jetbrains.teamcity:tests-support:$teamcityVersion"
+
+
+    compile "org.apache.httpcomponents:httpclient:4.3.4"
+    compile "com.fasterxml.jackson.core:jackson-core:2.2.2"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.2.2"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.2.2"
+    compile "com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.4.1"
+}
+
+teamcity {
+    version = teamcityVersion
+
+    downloadDir = "${teamcityDir}/_downloads"
+
+    descriptor = file("$rootDir/src/main/resources/META-INF/build-server-plugin-teamcity-web-parameters.xml")
+
+    environments {
+        teamcity81 {
+            version = '8.1.5'
+            homeDir = file("$teamcityDir/TeamCity-${version}")
+            dataDir = file("$teamcityDir/data/8.1")
+            javaHome = file(java8Home)
+        }
+
+        teamcity91 {
+            version = '9.1.6'
+            homeDir = file("$teamcityDir/TeamCity-${version}")
+            dataDir = file("$teamcityDir/data/9.1")
+            javaHome = file(java8Home)
+        }
+
+        teamcity10 {
+            version = '10.0-EAP'
+            downloadUrl = "https://download.jetbrains.com/teamcity/eap/TeamCity-40941.tar.gz"
+            homeDir = file("$teamcityDir/TeamCity-${version}")
+            dataDir = file("$teamcityDir/data/10.0")
+            javaHome = file(java8Home)
+        }
+    }
 }
