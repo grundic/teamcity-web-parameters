@@ -29,7 +29,7 @@
             return opt.text;
         } else {
             var $opt = $j(
-                    '<span><img src="' + optimage + '" /> ' + $j(opt.element).text() + '</span>'
+                    '<span><img src="' + optimage + '" style="height:16px;" /> ' + $j(opt.element).text() + '</span>'
             );
             return $opt;
         }
