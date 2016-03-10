@@ -28,7 +28,8 @@ For testing purposes, there is `webserver` directory, with sample files. Here is
         {
             "key": "Second item",
             "value": "200",
-            "enabled": true
+            "enabled": true,
+            "image": "http://lipis.github.io/flag-icon-css/flags/4x3/de.svg"
         },
         {
             "key": "Third item",
@@ -43,13 +44,23 @@ For testing purposes, there is `webserver` directory, with sample files. Here is
         {
             "key": "Fifth item",
             "value": "500",
-            "enabled": true
+            "enabled": true,
+            "default": true
         }
 
     ]
 }
 ```
-As you can see, format is simple and straightforward. Each element in `options`'s array is hash; `key`  will be option's display name, `value` will be option's value, `enabled` will determine if option will be enabled.
+As you can see, format is simple and straightforward. Each element in `options`'s array is hash;
+Here is available options of hash:
+  * `key` -- this option will be used as display name in select box
+  * `value` -- this option will be used as parameter value during build
+  * `enable` -- this option determines whether the corresponding option enabled on not. Setting to `false` will prevent
+  specific option from selection. By default it's `true`.
+  * `default` -- this option is used for setting default value if none was selected. You can mark multiple options as
+  default, but the first found will be used.
+  * `image` -- with help of this option you can add small icon for current element. Both url and embedded images are supported.
+
 To run your web-service, navigate to `webserver` directory and execute a command:
 ```python -m SimpleHTTPServer 8099```
 It will start simple http server on port 8099, which will serve your local directory, where command was executed. This is not a production web service and should be used in testing environment only.
