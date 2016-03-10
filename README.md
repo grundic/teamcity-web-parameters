@@ -8,7 +8,7 @@ With this plugin you can make your builds more flexible, because of dynamic para
   - name your own
 
 ![demo](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/teamcity-web-parameters.gif?raw=true)
-![select pictures](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/?select-with-pictures.pngraw=true)
+![select pictures](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/select-with-pictures.png?raw=true)
 
 Installation
 -------------
