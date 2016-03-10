@@ -12,7 +12,7 @@
                 name="url"
                 expandable="${true}"/>
     <span class="smallNote">
-      URL of wev-service for reading results
+      URL of web service for reading results
     </span>
     </td>
 </tr>
