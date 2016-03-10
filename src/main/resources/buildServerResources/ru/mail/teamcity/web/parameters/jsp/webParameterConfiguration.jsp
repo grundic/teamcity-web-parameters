@@ -10,6 +10,7 @@
     <td>
         <props:textProperty
                 name="url"
+                className="longField"
                 expandable="${true}"/>
     <span class="smallNote">
       URL of web service for reading results
