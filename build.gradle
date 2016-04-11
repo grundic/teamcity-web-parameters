@@ -14,7 +14,7 @@ apply plugin: 'java'
 apply plugin: 'com.github.rodm.teamcity-server'
 
 group = 'ru.mail.teamcity'
-version = '1.3.0'
+version = '1.4.0'
 
 repositories {
     maven {
