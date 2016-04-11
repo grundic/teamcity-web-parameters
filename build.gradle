@@ -27,6 +27,10 @@ ext {
     teamcityVersion = '9.1.6'
     teamcityDir = "${System.properties['user.home']}/.teamcity.d"
     java8Home = project.hasProperty('java8.home') ? property('java8.home') : '/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home'
+    serverOpts = "-DTC.res.disableAll=true " +
+            "-Dteamcity.development.mode=true " +
+            "-Dteamcity.development.shadowCopyClasses=true " +
+            "-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=50055"
 }
 
 test {
@@ -68,6 +72,7 @@ teamcity {
             homeDir = file("$teamcityDir/TeamCity-${version}")
             dataDir = file("$teamcityDir/data/8.1")
             javaHome = file(java8Home)
+            serverOptions = serverOpts
         }
 
         teamcity91 {
@@ -75,6 +80,7 @@ teamcity {
             homeDir = file("$teamcityDir/TeamCity-${version}")
             dataDir = file("$teamcityDir/data/9.1")
             javaHome = file(java8Home)
+            serverOptions = serverOpts
         }
 
         teamcity10 {
@@ -83,6 +89,7 @@ teamcity {
             homeDir = file("$teamcityDir/TeamCity-${version}")
             dataDir = file("$teamcityDir/data/10.0")
             javaHome = file(java8Home)
+            serverOptions = serverOpts
         }
     }
 }
