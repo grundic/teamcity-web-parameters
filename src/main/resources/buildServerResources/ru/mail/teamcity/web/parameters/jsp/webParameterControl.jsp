@@ -52,7 +52,7 @@
             <c:forEach var="option" items="${options.options}">
                 <option
                         value="${option.value}"
-                        <c:if test="${option.key eq selectedKey}">selected</c:if>
+                        <c:if test="${option.value eq selectedKey}">selected</c:if>
                         <c:if test="${not option.enabled}">disabled</c:if>
                         <c:if test="${not empty option.image}">data-image="${option.image}"</c:if>
                 >

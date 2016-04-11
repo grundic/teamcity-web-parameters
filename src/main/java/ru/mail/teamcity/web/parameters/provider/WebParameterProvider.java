@@ -66,11 +66,6 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
 
         Map<String, String> config = context.getDescription().getParameterTypeArguments();
 
-
-
-
-        //((ParameterContextFactory.ParameterRenderContextBase) context).myParameters;
-
         String url = config.get(URL_PARAMETER);
         String format = config.get(FORMAT_PARAMETER);
         Boolean enableEditOnError;
