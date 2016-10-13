@@ -1,4 +1,3 @@
-
 buildscript {
     repositories {
         maven {
@@ -6,7 +5,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'com.github.rodm', name: 'gradle-teamcity-plugin', version: '0.8.3'
+        classpath group: 'com.github.rodm', name: 'gradle-teamcity-plugin', version: '0.9.1'
     }
 }
 
@@ -17,14 +16,18 @@ group = 'ru.mail.teamcity'
 version = '1.4.0'
 
 repositories {
+    mavenCentral()
     maven {
         url "http://repository.jetbrains.com/all"
+    }
+    maven {
+        url "http://download.jetbrains.com/teamcity-repository"
     }
     mavenLocal()
 }
 
 ext {
-    teamcityVersion = '9.1.6'
+    teamcityVersion = System.properties['teamcity.version'] ?: '10.0.2'
     teamcityDir = "${System.properties['user.home']}/.teamcity.d"
     java8Home = project.hasProperty('java8.home') ? property('java8.home') : '/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home'
     serverOpts = "-DTC.res.disableAll=true " +
@@ -38,7 +41,7 @@ test {
 }
 
 dependencies {
-    provided "org.jetbrains.teamcity:server-api:$teamcityVersion"
+    provided "org.jetbrains.teamcity:server-api:${teamcityVersion}"
     /* This dependency is not provided by JetBrains,
      * so you have to install it manually from TeamCity distribution
      * in order to be able to build plugin:
@@ -46,9 +49,9 @@ dependencies {
      * mvn install:install-file -Dfile=webapps/ROOT/WEB-INF/lib/web.jar\
      * -DgroupId=org.jetbrains.teamcity -DartifactId=web -Dversion=9.1.6 -Dpackaging=jar
      */
-    provided "org.jetbrains.teamcity:web:$teamcityVersion"
-    provided "org.jetbrains.teamcity:server:$teamcityVersion"
-    testRuntime "org.jetbrains.teamcity:tests-support:$teamcityVersion"
+    provided "org.jetbrains.teamcity:web:${teamcityVersion}"
+    provided "org.jetbrains.teamcity:server:${teamcityVersion}"
+    testRuntime "org.jetbrains.teamcity:tests-support:${teamcityVersion}"
 
 
     compile "org.apache.httpcomponents:httpclient:4.3.4"
@@ -61,35 +64,37 @@ dependencies {
 teamcity {
     version = teamcityVersion
 
-    downloadDir = "${teamcityDir}/_downloads"
+    server {
+        downloadsDir = "${teamcityDir}/_downloads"
 
-    descriptor = file("teamcity-plugin.xml")
-    tokens = [Version: project.version]
+        descriptor = file("teamcity-plugin.xml")
+        tokens = [Version: project.version]
 
-    environments {
-        teamcity81 {
-            version = '8.1.5'
-            homeDir = file("$teamcityDir/TeamCity-${version}")
-            dataDir = file("$teamcityDir/data/8.1")
-            javaHome = file(java8Home)
-            serverOptions = serverOpts
-        }
 
-        teamcity91 {
-            version = '9.1.6'
-            homeDir = file("$teamcityDir/TeamCity-${version}")
-            dataDir = file("$teamcityDir/data/9.1")
-            javaHome = file(java8Home)
-            serverOptions = serverOpts
-        }
+        environments {
+            teamcity81 {
+                version = '8.1.5'
+                homeDir = file("$teamcityDir/TeamCity-${version}")
+                dataDir = file("$teamcityDir/data/8.1")
+                javaHome = file(java8Home)
+                serverOptions = serverOpts
+            }
 
-        teamcity10 {
-            version = '10.0-EAP'
-            downloadUrl = "https://download.jetbrains.com/teamcity/eap/TeamCity-40941.tar.gz"
-            homeDir = file("$teamcityDir/TeamCity-${version}")
-            dataDir = file("$teamcityDir/data/10.0")
-            javaHome = file(java8Home)
-            serverOptions = serverOpts
+            teamcity91 {
+                version = '9.1.6'
+                homeDir = file("$teamcityDir/TeamCity-${version}")
+                dataDir = file("$teamcityDir/data/9.1")
+                javaHome = file(java8Home)
+                serverOptions = serverOpts
+            }
+
+            teamcity10 {
+                version = '10.0.2'
+                homeDir = file("$teamcityDir/TeamCity-${version}")
+                dataDir = file("$teamcityDir/data/${version}")
+                javaHome = file(java8Home)
+                serverOptions = serverOpts
+            }
         }
     }
 }
