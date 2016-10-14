@@ -13,33 +13,17 @@
       href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/select2.min.css">
 
 <script type="text/javascript">
-    function addScript( src,callback) {
-        var s = document.createElement( 'script' );
-        s.setAttribute( 'src', src );
-        s.onload=callback;
-        document.body.appendChild( s );
-    }
-
-    function addOptionImage(opt){
-        if (!opt.id) {
-            return opt.text;
-        }
-        var optimage = $j(opt.element).data('image');
-        if(!optimage){
-            return opt.text;
-        } else {
-            var $opt = $j(
-                    '<span><img src="' + optimage + '" style="height:16px;" /> ' + $j(opt.element).text() + '</span>'
-            );
-            return $opt;
-        }
+    function addScript(src, callback) {
+        var scriptElement = document.createElement('script');
+        scriptElement.setAttribute('src', src);
+        scriptElement.onload = callback;
+        document.body.appendChild(scriptElement);
     }
 
     $j(document).ready(function ($) {
-        addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/select2.min.js", function(){
-            $j("#${context.id}").select2({
-                templateResult: addOptionImage,
-                templateSelection: addOptionImage
+        addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/select2.min.js", function () {
+            addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/webParametersControl.js", function () {
+                WebParametersControl.init("${context.id}");
             });
         });
     });
