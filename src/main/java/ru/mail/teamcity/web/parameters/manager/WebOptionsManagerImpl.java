@@ -28,7 +28,7 @@ import java.util.Map;
 public class WebOptionsManagerImpl implements WebOptionsManager {
 
     private final static Logger LOG = Logger.getLogger(WebOptionsManagerImpl.class);
-    private final static int DEFAULT_TIMEOUT = 1*60*1000;
+    private final static int DEFAULT_TIMEOUT = 1 * 60 * 1000;
 
     @NotNull
     public Options read(@NotNull String url, @NotNull String format, @NotNull Map<String, String> errors) {

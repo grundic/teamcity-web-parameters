@@ -3,9 +3,9 @@ package ru.mail.teamcity.web.parameters;
 import jetbrains.buildServer.serverSide.*;
 import org.jetbrains.annotations.NotNull;
 import ru.mail.teamcity.web.parameters.data.Option;
-import ru.mail.teamcity.web.parameters.provider.WebParameterProvider;
 import ru.mail.teamcity.web.parameters.data.Options;
 import ru.mail.teamcity.web.parameters.manager.WebOptionsManager;
+import ru.mail.teamcity.web.parameters.provider.WebParameterProvider;
 
 import java.util.Collection;
 import java.util.HashMap;
