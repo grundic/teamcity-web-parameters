@@ -8,13 +8,8 @@
 <tr>
     <th><label for="url">URL:<l:star/></label></th>
     <td>
-        <props:textProperty
-                name="url"
-                className="longField"
-                expandable="${true}"/>
-    <span class="smallNote">
-      URL of web service for reading results
-    </span>
+        <props:textProperty name="url" className="longField"/>
+        <span class="smallNote">URL of web service for reading results</span>
     </td>
 </tr>
 
@@ -30,11 +25,41 @@
 </tr>
 
 <tr>
+    <th><label for="multiple">Allow multiple:<l:star/></label></th>
+    <td>
+        <props:checkboxProperty name="multiple"/>
+        <label for="multiple">Allow to select multiple items</label>
+    </td>
+</tr>
+
+<tr id="multipleSeparator">
+    <th><label for="valueSeparator">Value separator:</label></th>
+    <td>
+        <props:textProperty name="valueSeparator" className="longField"/>
+        <span class="smallNote">Specify multiple selected items separator. Leave blank to use ','.</span>
+    </td>
+</tr>
+
+<tr>
     <th><label for="enableEditOnError">Enable edit on error:<l:star/></label></th>
     <td>
         <props:checkboxProperty name="enableEditOnError"/>
-    <span class="smallNote">
-      Enable manual edit in case of web service is not available
-    </span>
+        <label for="enableEditOnError">Enable manual edit in case of web service is not available</label>
     </td>
 </tr>
+
+
+<script type="text/javascript">
+    (function(){
+        var update = function() {
+            if ($('multiple').checked) {
+                BS.Util.show('multipleSeparator');
+            } else {
+                BS.Util.hide('multipleSeparator');
+            }
+        };
+
+        $('multiple').on('change', update);
+        update();
+    })();
+</script>

@@ -4,7 +4,8 @@ var WebParametersControl = {
     init: function (element_id) {
         $j("#" + element_id).select2({
             templateResult: this.addOptionImage,
-            templateSelection: this.addOptionImage
+            templateSelection: this.addOptionImage,
+
         });
     },
 

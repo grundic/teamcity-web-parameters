@@ -4,6 +4,8 @@
 <%@ taglib prefix="forms" tagdir="/WEB-INF/tags/forms" %>
 <jsp:useBean id="context" scope="request" type="jetbrains.buildServer.controllers.parameters.ParameterRenderContext"/>
 <jsp:useBean id="options" scope="request" type="ru.mail.teamcity.web.parameters.data.Options"/>
+<jsp:useBean id="values" scope="request" type="java.util.Collection"/>
+<jsp:useBean id="multiple" scope="request" type="java.lang.Boolean"/>
 <jsp:useBean id="enableEditOnError" scope="request" type="java.lang.Boolean"/>
 <jsp:useBean id="errors" scope="request" type="java.util.Map<java.lang.String, java.lang.String>"/>
 
@@ -32,11 +34,15 @@
 <c:choose>
     <c:when test="${empty errors}">
         <c:set var="selectedKey" value="${context.parameter.value}"/>
-        <select name="${context.id}" id="${context.id}" style="width:100%;">
+
+        <select
+                name="${context.id}" id="${context.id}" style="width:100%;"
+                <c:if test="${multiple}">multiple="multiple"</c:if>
+        >
             <c:forEach var="option" items="${options.options}">
                 <option
                         value="${option.value}"
-                        <c:if test="${option.value eq selectedKey}">selected</c:if>
+                        <c:if test="${values.contains(option.value)}">selected</c:if>
                         <c:if test="${not option.enabled}">disabled</c:if>
                         <c:if test="${not empty option.image}">data-image="${option.image}"</c:if>
                 >
