@@ -7,6 +7,8 @@ import jetbrains.buildServer.controllers.parameters.InvalidParametersException;
 import jetbrains.buildServer.controllers.parameters.ParameterEditContext;
 import jetbrains.buildServer.controllers.parameters.ParameterRenderContext;
 import jetbrains.buildServer.controllers.parameters.api.ParameterControlProviderAdapter;
+import jetbrains.buildServer.serverSide.ProjectManager;
+import jetbrains.buildServer.serverSide.SBuildType;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,19 +54,25 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
     @NotNull
     private static final String EMPTY_STRING = "";
     @NotNull
+    private static final String BUILD_TYPE_ID = "buildTypeId";
+
+    @NotNull
     private final PluginDescriptor pluginDescriptor;
     @NotNull
     private final WebOptionsManager webOptionsManager;
+    @NotNull
+    private final ProjectManager projectManager;
     @NotNull
     private final Map<String, String> errors;
 
 
     public WebParameterProvider(
             @NotNull PluginDescriptor pluginDescriptor,
-            @NotNull WebOptionsManager webOptionsManager
-    ) {
+            @NotNull WebOptionsManager webOptionsManager,
+            @NotNull ProjectManager projectManager) {
         this.pluginDescriptor = pluginDescriptor;
         this.webOptionsManager = webOptionsManager;
+        this.projectManager = projectManager;
         this.errors = new HashMap<>();
     }
 
@@ -101,7 +109,13 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
 
         Map<String, String> config = context.getDescription().getParameterTypeArguments();
 
-        String url = getValue(config, URL_PARAMETER, EMPTY_STRING);
+        String buildTypeId = request.getParameter(BUILD_TYPE_ID);
+        SBuildType buildType = projectManager.findBuildTypeByExternalId(buildTypeId);
+        assert buildType != null;
+
+        String urlRaw = getValue(config, URL_PARAMETER, EMPTY_STRING);
+        String url = buildType.getValueResolver().resolve(urlRaw).getResult();
+
         String format = getValue(config, FORMAT_PARAMETER, EMPTY_STRING);
         Boolean multiple = getBoolValue(config, MULTIPLE_PARAMETER, EMPTY_STRING);
         String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);

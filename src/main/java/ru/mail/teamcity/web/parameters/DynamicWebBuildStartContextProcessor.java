@@ -40,7 +40,8 @@ public class DynamicWebBuildStartContextProcessor implements BuildStartContextPr
                 String buildValue = context.getBuild().getBuildOwnParameters().get(parameter.getName());
                 // check if value from build is not provided and we don't have any default value
                 if (buildValue.isEmpty() && parameter.getValue().isEmpty()) {
-                    String url = description.getParameterTypeArguments().get(WebParameterProvider.URL_PARAMETER);
+                    String urlRaw = description.getParameterTypeArguments().get(WebParameterProvider.URL_PARAMETER);
+                    String url = buildType.getValueResolver().resolve(urlRaw).getResult();
                     String format = description.getParameterTypeArguments().get(WebParameterProvider.FORMAT_PARAMETER);
                     Map<String, String> errors = new HashMap<>();
 
