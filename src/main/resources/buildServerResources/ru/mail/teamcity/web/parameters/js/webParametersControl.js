@@ -4,8 +4,7 @@ var WebParametersControl = {
     init: function (element_id) {
         $j("#" + element_id).select2({
             templateResult: this.addOptionImage,
-            templateSelection: this.addOptionImage,
-
+            templateSelection: this.addOptionImage
         });
     },
 
@@ -18,7 +17,7 @@ var WebParametersControl = {
             return opt.text;
         } else {
             return $j(
-                '<span><img src="' + optimage + '" style="height:16px;" /> ' + $j(opt.element).text() + '</span>'
+                '<span><img src="' + optimage + '" style="height:16px;" />' + $j(opt.element).text() + '</span>'
             );
         }
     }
