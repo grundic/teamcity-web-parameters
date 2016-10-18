@@ -6,6 +6,7 @@
 <jsp:useBean id="options" scope="request" type="ru.mail.teamcity.web.parameters.data.Options"/>
 <jsp:useBean id="values" scope="request" type="java.util.Collection"/>
 <jsp:useBean id="multiple" scope="request" type="java.lang.Boolean"/>
+<jsp:useBean id="tagSupport" scope="request" type="java.lang.Boolean"/>
 <jsp:useBean id="enableEditOnError" scope="request" type="java.lang.Boolean"/>
 <jsp:useBean id="errors" scope="request" type="java.util.Map<java.lang.String, java.lang.String>"/>
 
@@ -27,7 +28,7 @@
     $j(document).ready(function ($) {
         addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/selectize.js", function () {
             addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/webParametersControl.js", function () {
-                WebParametersControl.init("${context.id}");
+                WebParametersControl.init("${context.id}", "${tagSupport}");
             });
         });
     });

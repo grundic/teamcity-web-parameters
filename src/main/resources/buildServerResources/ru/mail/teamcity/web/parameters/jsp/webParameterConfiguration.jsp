@@ -31,7 +31,7 @@
     <th><label for="multiple">Allow multiple:<l:star/></label></th>
     <td>
         <props:checkboxProperty name="multiple"/>
-        <label for="multiple">Allow to select multiple items</label>
+        <label for="multiple">Allow to select multiple items.</label>
     </td>
 </tr>
 
@@ -44,10 +44,18 @@
 </tr>
 
 <tr>
+    <th><label for="tagSupport">Tag support:<l:star/></label></th>
+    <td>
+        <props:checkboxProperty name="tagSupport"/>
+        <label for="tagSupport">Allow to create new items, that aren't in the initial list of options.</label>
+    </td>
+</tr>
+
+<tr>
     <th><label for="enableEditOnError">Enable edit on error:<l:star/></label></th>
     <td>
         <props:checkboxProperty name="enableEditOnError"/>
-        <label for="enableEditOnError">Enable manual edit in case of web service is not available</label>
+        <label for="enableEditOnError">Enable manual edit in case of web service is not available.</label>
     </td>
 </tr>
 

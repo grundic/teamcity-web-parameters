@@ -1,9 +1,10 @@
 'use strict';
 
 var WebParametersControl = {
-    init: function (element_id) {
+    init: function (element_id, create) {
         $j("#" + element_id).selectize({
             duplicates: true,
+            create: JSON.parse(create.toLowerCase()),
             render: {
                 option: this.doRender,
                 item: this.doRender

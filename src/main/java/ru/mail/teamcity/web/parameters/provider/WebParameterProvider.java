@@ -44,6 +44,8 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
     @NotNull
     public final static String ENABLE_EDIT_ON_ERROR_PARAMETER = "enableEditOnError";
     @NotNull
+    public final static String TAG_SUPPORT_PARAMETER = "tagSupport";
+    @NotNull
     public final static String OPTIONS_NAME = "options";
     @NotNull
     public final static String VALUES_NAME = "values";
@@ -119,6 +121,7 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
         String format = getValue(config, FORMAT_PARAMETER, EMPTY_STRING);
         Boolean multiple = getBoolValue(config, MULTIPLE_PARAMETER, EMPTY_STRING);
         String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);
+        Boolean tagSupport = getBoolValue(config, TAG_SUPPORT_PARAMETER, EMPTY_STRING);
         Boolean enableEditOnError = getBoolValue(config, ENABLE_EDIT_ON_ERROR_PARAMETER, EMPTY_STRING);
 
         errors.clear();
@@ -134,6 +137,7 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
         modelAndView.getModel().put(OPTIONS_NAME, options);
         modelAndView.getModel().put(VALUES_NAME, values);
         modelAndView.getModel().put(MULTIPLE_PARAMETER, multiple);
+        modelAndView.getModel().put(TAG_SUPPORT_PARAMETER, tagSupport);
         modelAndView.getModel().put(ENABLE_EDIT_ON_ERROR_PARAMETER, enableEditOnError);
         modelAndView.getModel().put(ERRORS_NAME, errors);
         return modelAndView;
