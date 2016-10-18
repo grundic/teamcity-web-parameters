@@ -2,23 +2,20 @@
 
 var WebParametersControl = {
     init: function (element_id) {
-        $j("#" + element_id).select2({
-            templateResult: this.addOptionImage,
-            templateSelection: this.addOptionImage
+        $j("#" + element_id).selectize({
+            duplicates: true,
+            render: {
+                option: this.doRender,
+                item: this.doRender
+            }
         });
     },
 
-    addOptionImage: function (opt) {
-        if (!opt.id) {
-            return opt.text;
+    doRender: function (item, escape) {
+        var result = '<div>';
+        if (item.image) {
+            result += '<img src="' + escape(item.image) + '" style="height:16px; vertical-align:middle">';
         }
-        var optimage = $j(opt.element).data('image');
-        if (!optimage) {
-            return opt.text;
-        } else {
-            return $j(
-                '<span><img src="' + optimage + '" style="height:16px;" />' + $j(opt.element).text() + '</span>'
-            );
-        }
+        return result + "<span>" + escape(item.text) + '</span></div>';
     }
 };
