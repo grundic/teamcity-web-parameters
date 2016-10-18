@@ -1,34 +1,51 @@
 {
-    "options": [
-        {
-            "key": "First item",
-            "value": "100",
-            "enabled": true,
-            "image": "data:image/gif;base64,R0lGODlhEAAOALMAAOazToeHh0tLS/7LZv/0jvb29t/f3//Ub//ge8WSLf/rhf/3kdbW1mxsbP//mf///yH5BAAAAAAALAAAAAAQAA4AAARe8L1Ekyky67QZ1hLnjM5UUde0ECwLJoExKcppV0aCcGCmTIHEIUEqjgaORCMxIC6e0CcguWw6aFjsVMkkIr7g77ZKPJjPZqIyd7sJAgVGoEGv2xsBxqNgYPj/gAwXEQA7"
-        },
-        {
-            "key": "Second item",
-            "value": "200",
-            "enabled": true,
-            "image": "http://lipis.github.io/flag-icon-css/flags/4x3/de.svg"
-        },
-        {
-            "key": "Third item",
-            "value": "300",
-            "enabled": false,
-            "default": true
-        },
-        {
-            "key": "Fourth item",
-            "value": "400",
-            "enabled": 0
-        },
-        {
-            "key": "Fifth item",
-            "value": "500",
-            "enabled": true,
-            "default": true
-        }
-
-    ]
+  "options": [
+    {
+      "key": "First item",
+      "value": "100",
+      "enabled": true,
+      "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAARVBMVEUAAAAAnwAApwAApQAAowAAoQAAowAAogAAogAAowAAowAAowAAogAAowAAowAAogAAowAAowAAogAAowAAogAAowAAowBeQgJPAAAAFnRSTlMAECAwQE9QYHB/gJCfoL/Az9Df4O/w7QmRyQAAAKpJREFUeAGFkVEOgyAQRAdssbUgILL3P2pNUzZgSOZ9mbyRYRcMOL8nkbT7JyZYf4pyenv3m+p/5D1ok3pZilwkA2UZfl+B9ZfQGjP4gouiX3q+cmjg0e6nbqxY23xaoGccvUeQKepRiXfEIxCPSDwy8WCeBngFvSQdky6Krpo/lqkssQlLZJnjWElBY5kmsoVi8sQb9Gx11PWFGybUTgeLCS7ELBLjx6HxBSuNNUCOWP1JAAAAAElFTkSuQmCC"
+    },
+    {
+      "key": "Second item",
+      "value": "200",
+      "enabled": true,
+      "image": "http://lipis.github.io/flag-icon-css/flags/4x3/de.svg"
+    },
+    {
+      "key": "Third item",
+      "value": "300",
+      "enabled": false,
+      "default": true
+    },
+    {
+      "key": "Fourth item",
+      "value": "400",
+      "enabled": 0
+    },
+    {
+      "key": "Fifth item",
+      "value": "500",
+      "enabled": true,
+      "default": true
+    },
+    {
+      "key": "Sixth item",
+      "value": "600",
+      "enabled": true,
+      "default": true
+    },
+    {
+      "key": "Seventh item",
+      "value": "700",
+      "enabled": true,
+      "default": true
+    },
+    {
+      "key": "Eighth item",
+      "value": "800",
+      "enabled": true,
+      "default": true
+    }
+  ]
 }
