@@ -7,6 +7,7 @@ import jetbrains.buildServer.controllers.parameters.InvalidParametersException;
 import jetbrains.buildServer.controllers.parameters.ParameterEditContext;
 import jetbrains.buildServer.controllers.parameters.ParameterRenderContext;
 import jetbrains.buildServer.controllers.parameters.api.ParameterControlProviderAdapter;
+import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.ProjectManager;
 import jetbrains.buildServer.serverSide.SBuildType;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
@@ -18,6 +19,7 @@ import ru.mail.teamcity.web.parameters.manager.WebOptionsManager;
 import ru.mail.teamcity.web.parameters.parser.ParserFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -164,5 +166,30 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
             return joiner.join(values);
         }
         return super.convertParameterValue(httpServletRequest, context, s);
+    }
+
+    @NotNull
+    @Override
+    public Collection<InvalidProperty> validateParameterValue(@NotNull HttpServletRequest httpServletRequest, @NotNull ParameterRenderContext context, @Nullable String s) throws InvalidParametersException {
+        Collection<InvalidProperty> result = new ArrayList<>();
+
+        Map<String, String> config = context.getDescription().getParameterTypeArguments();
+
+        String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);
+        String[] values = httpServletRequest.getParameterValues(context.getId());
+        if (null == values){
+            return result;
+        }
+
+        for (String value : values) {
+            if (value.contains(separator)) {
+                result.add(new InvalidProperty(
+                        context.getId(),
+                        String.format("Selected value '%s' contains separator '%s'!", value, separator))
+                );
+            }
+        }
+
+        return result;
     }
 }
