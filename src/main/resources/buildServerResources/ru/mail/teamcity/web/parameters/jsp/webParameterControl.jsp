@@ -13,9 +13,7 @@
 <link rel="stylesheet" type="text/css"
       href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/webParameter.css">
 <link rel="stylesheet" type="text/css"
-      href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/selectize.css">
-<link rel="stylesheet" type="text/css"
-      href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/selectize.default.css">
+      href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/select2.min.css">
 
 <script type="text/javascript">
     function addScript(src, callback) {
@@ -26,7 +24,7 @@
     }
 
     $j(document).ready(function ($) {
-        addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/selectize.js", function () {
+        addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/select2.full.min.js", function () {
             addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/webParametersControl.js", function () {
                 WebParametersControl.init("${context.id}", "${tagSupport}");
             });
@@ -43,15 +41,13 @@
                 <c:if test="${multiple}">multiple="multiple"</c:if>
         >
             <c:forEach var="option" items="${options.options}">
-                <c:if test="${option.enabled}">
-                    <option
-                            value="${option.value}"
-                            <c:if test="${values.contains(option.value)}">selected</c:if>
-                            data-data='{"image":"${option.image}"}'
-                    >
-                        <c:out value="${option.key}"/>
-                    </option>
-                </c:if>
+                <option value="${option.value}"
+                        <c:if test="${values.contains(option.value)}">selected</c:if>
+                        <c:if test="${not option.enabled}">disabled</c:if>
+                        <c:if test="${not empty option.image}">data-image="${option.image}"</c:if>
+                >
+                    <c:out value="${option.key}"/>
+                </option>
             </c:forEach>
         </select>
     </c:when>

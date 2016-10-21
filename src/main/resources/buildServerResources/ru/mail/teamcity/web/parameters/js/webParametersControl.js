@@ -1,22 +1,24 @@
 'use strict';
 
 var WebParametersControl = {
-    init: function (element_id, create) {
-        $j("#" + element_id).selectize({
-            duplicates: true,
-            create: JSON.parse(create.toLowerCase()),
-            render: {
-                option: this.doRender,
-                item: this.doRender
-            }
+    init: function (element_id) {
+        $j("#" + element_id).select2({
+            templateResult: this.addOptionImage,
+            templateSelection: this.addOptionImage
         });
     },
 
-    doRender: function (item, escape) {
-        var result = '<div>';
-        if (item.image) {
-            result += '<img src="' + escape(item.image) + '" style="height:16px; vertical-align:middle">';
+    addOptionImage: function (opt) {
+        if (!opt.id) {
+            return opt.text;
         }
-        return result + "<span>" + escape(item.text) + '</span></div>';
+        var optimage = $j(opt.element).data('image');
+        if (!optimage) {
+            return opt.text;
+        } else {
+            return $j(
+                '<span><img src="' + optimage + '" style="height:16px;" />' + $j(opt.element).text() + '</span>'
+            );
+        }
     }
 };
