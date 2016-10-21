@@ -15,11 +15,8 @@ Here are some highlights of a plugin:
   - tag support (user can add his own value)
 
 ![demo](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/process-select.gif?raw=true)
-![demo](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/teamcity-web-parameters.gif?raw=true)
-![select pictures](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/configuration.png?raw=true)
-![select pictures](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/single-select.png?raw=true)
-![select pictures](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/multi-select.png?raw=true)
-![select pictures](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/select-with-pictures.png?raw=true)
+
+More images available [here](https://github.com/grundic/teamcity-web-parameters/tree/master/demo).
 
 Installation
 -------------
