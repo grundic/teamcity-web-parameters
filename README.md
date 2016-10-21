@@ -16,7 +16,7 @@ Here are some highlights of a plugin:
 
 ![demo](https://github.com/grundic/teamcity-web-parameters/blob/master/demo/process-select.gif?raw=true)
 
-More images available [here](https://github.com/grundic/teamcity-web-parameters/tree/master/demo).
+More images available [here](https://github.com/grundic/teamcity-web-parameters/wiki/Demo).
 
 Installation
 -------------
