@@ -28,7 +28,7 @@
     $j(document).ready(function ($) {
         addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/select2.full.min.js", function () {
             addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/webParametersControl.js", function () {
-                WebParametersControl.init("${context.id}", "${tagSupport}");
+                WebParametersControl.init("${context.id}");
             });
         });
     });
@@ -41,6 +41,7 @@
         <select
                 name="${context.id}" id="${context.id}" style="width:100%;"
                 <c:if test="${multiple}">multiple="multiple"</c:if>
+                <c:if test="${tagSupport}">data-tags="true"</c:if>
         >
             <c:forEach var="option" items="${options.options}">
                 <option value="${option.value}"
