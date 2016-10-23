@@ -42,9 +42,9 @@
     <th><label>Payload:</label></th>
     <td>
         <div class="completionIconWrapper">
-            <props:multilineProperty name="payload" linkTitle="Payload"
+            <props:multilineProperty name="payload" linkTitle="POST Data"
                                      cols="60" rows="3" className="longField autocompletionProperty"
-                                     expanded="true"/>
+                                     expanded="false"/>
         </div>
         <span class="smallNote">Data payload for sending to the server.</span>
     </td>
@@ -143,6 +143,10 @@
         updatePayloadRowVisibility: function () {
             var visible = ($j('#method').is(":visible")) && ($j('#method').val() === 'POST');
             visible ? $j("#payloadRow").show() : $j("#payloadRow").hide();
+
+            if ($j('#payload').val()){
+                BS.MultilineProperties.setVisible('payload', true);
+            }
             BS.MultilineProperties.updateVisible();
         }
     };
