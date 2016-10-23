@@ -5,15 +5,12 @@ import org.jetbrains.annotations.NotNull;
 import ru.mail.teamcity.web.parameters.data.Option;
 import ru.mail.teamcity.web.parameters.data.Options;
 import ru.mail.teamcity.web.parameters.manager.WebOptionsManager;
-import ru.mail.teamcity.web.parameters.provider.WebParameterProvider;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.mail.teamcity.web.parameters.provider.WebParameterProvider.METHOD_PARAMETER;
-import static ru.mail.teamcity.web.parameters.provider.WebParameterProvider.PAYLOAD_PARAMETER;
-import static ru.mail.teamcity.web.parameters.provider.WebParameterProvider.TIMEOUT_PARAMETER;
+import static ru.mail.teamcity.web.parameters.Constants.*;
 
 /**
  * User: g.chernyshev
@@ -40,13 +37,13 @@ public class DynamicWebBuildStartContextProcessor implements BuildStartContextPr
         for (Parameter parameter : buildParameters) {
             ControlDescription description = parameter.getControlDescription();
             // check if parameter is of web param provider type
-            if (null != description && description.getParameterType().equals(WebParameterProvider.PARAMETER_TYPE)) {
+            if (null != description && description.getParameterType().equals(Constants.PARAMETER_TYPE)) {
                 String buildValue = context.getBuild().getBuildOwnParameters().get(parameter.getName());
                 // check if value from build is not provided and we don't have any default value
                 if (buildValue.isEmpty() && parameter.getValue().isEmpty()) {
                     Map<String, String> extraOptions = new HashMap<>();
 
-                    String urlRaw = description.getParameterTypeArguments().get(WebParameterProvider.URL_PARAMETER);
+                    String urlRaw = description.getParameterTypeArguments().get(Constants.URL_PARAMETER);
                     String url = buildType.getValueResolver().resolve(urlRaw).getResult();
 
                     String timeout = description.getParameterTypeArguments().get(TIMEOUT_PARAMETER);
@@ -59,7 +56,7 @@ public class DynamicWebBuildStartContextProcessor implements BuildStartContextPr
                     String payload = buildType.getValueResolver().resolve(payloadRaw).getResult();
                     extraOptions.put(PAYLOAD_PARAMETER, payload);
 
-                    String format = description.getParameterTypeArguments().get(WebParameterProvider.FORMAT_PARAMETER);
+                    String format = description.getParameterTypeArguments().get(Constants.FORMAT_PARAMETER);
                     Map<String, String> errors = new HashMap<>();
 
                     Options options = webOptionsManager.read(url,extraOptions, format, errors);

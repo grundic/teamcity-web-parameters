@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.mail.teamcity.web.parameters.provider.WebParameterProvider.*;
+import static ru.mail.teamcity.web.parameters.Constants.*;
 
 /**
  * User: g.chernyshev
