@@ -16,6 +16,42 @@
     </td>
 </tr>
 
+<%--Advanced options start --%>
+
+<tr>
+    <th colspan="2">
+        <div class="advancedSettingsToggle" id="advancedSettingsToggle" style="height: 0;">
+            <i class="icon-wrench"></i><a href="javascript://" showdiscardchangesmessage="false">Show advanced
+            options</a>
+        </div>
+    </th>
+</tr>
+
+<tr class="advancedSetting advancedSettingHighlight hidden">
+    <th><label>Request method:</label></th>
+    <td>
+        <props:selectProperty name="method">
+            <props:option value="GET">GET</props:option>
+            <props:option value="POST">POST</props:option>
+        </props:selectProperty>
+        <span class="smallNote">Select request method for getting options.</span>
+    </td>
+</tr>
+
+<tr id="payloadRow" class="advancedSetting advancedSettingHighlight hidden">
+    <th><label>Payload:</label></th>
+    <td>
+        <div class="completionIconWrapper">
+            <props:multilineProperty name="payload" linkTitle="Payload"
+                                     cols="60" rows="3" className="longField autocompletionProperty"
+                                     expanded="true"/>
+        </div>
+        <span class="smallNote">Data payload for sending to the server.</span>
+    </td>
+</tr>
+
+<%--Advanced options end --%>
+
 <tr>
     <th><label>Response format:<l:star/></label></th>
     <td>
@@ -61,32 +97,55 @@
 
 
 <script type="text/javascript">
-    (function () {
-        var update = function () {
+
+    var webParameterConfig = {
+        init: function () {
+            $('multiple').on('change', this.toggleMultipleSeparator);
+            this.toggleMultipleSeparator();
+
+            $j('#method').on('change', this.updatePayloadRowVisibility);
+            this.updatePayloadRowVisibility();
+
+            this.addAutocomplete();
+            this.advancedSettingsToggle();
+        },
+
+        toggleMultipleSeparator: function () {
             if ($('multiple').checked) {
                 BS.Util.show('multipleSeparator');
             } else {
                 BS.Util.hide('multipleSeparator');
             }
-        };
+        },
 
-        var gup = function (name, url) {
+        gup: function (name, url) {
             if (!url) url = location.href;
             name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
             var regexS = "[\\?&]" + name + "=([^&#]*)";
             var regex = new RegExp(regexS);
             var results = regex.exec(url);
             return results == null ? null : results[1];
-        };
+        },
 
-        var addAutocomplete = function () {
-            var idQueryParam = gup('id');
+        addAutocomplete: function () {
+            var idQueryParam = this.gup('id');
             BS.AvailableParams.attachPopups('settingsId=' + idQueryParam, 'autocompletionProperty');
-        };
+        },
 
+        advancedSettingsToggle: function () {
+            var that = this;
+            $j('#advancedSettingsToggle').click(function () {
+                $j(".advancedSetting").toggle();
+                that.updatePayloadRowVisibility();
+            });
+        },
 
-        $('multiple').on('change', update);
-        update();
-        addAutocomplete();
-    })();
+        updatePayloadRowVisibility: function () {
+            var visible = ($j('#method').is(":visible")) && ($j('#method').val() === 'POST');
+            visible ? $j("#payloadRow").show() : $j("#payloadRow").hide();
+            BS.MultilineProperties.updateVisible();
+        }
+    };
+
+    webParameterConfig.init();
 </script>

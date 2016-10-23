@@ -42,10 +42,16 @@ public class DynamicWebBuildStartContextProcessor implements BuildStartContextPr
                 if (buildValue.isEmpty() && parameter.getValue().isEmpty()) {
                     String urlRaw = description.getParameterTypeArguments().get(WebParameterProvider.URL_PARAMETER);
                     String url = buildType.getValueResolver().resolve(urlRaw).getResult();
+
+                    String method = description.getParameterTypeArguments().get(WebParameterProvider.METHOD_PARAMETER);
+                    
+                    String payloadRaw = description.getParameterTypeArguments().get(WebParameterProvider.PAYLOAD_PARAMETER);
+                    String payload = buildType.getValueResolver().resolve(payloadRaw).getResult();
+
                     String format = description.getParameterTypeArguments().get(WebParameterProvider.FORMAT_PARAMETER);
                     Map<String, String> errors = new HashMap<>();
 
-                    Options options = webOptionsManager.read(url, format, errors);
+                    Options options = webOptionsManager.read(url, method, payload, format, errors);
                     for (Option option : options.getOptions()) {
                         if (option.isEnabled() && option.isDefault()) {
                             context.addSharedParameter(parameter.getName(), option.getValue());

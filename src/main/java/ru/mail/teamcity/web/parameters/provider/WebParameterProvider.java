@@ -36,6 +36,10 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
     @NotNull
     public final static String URL_PARAMETER = "url";
     @NotNull
+    public final static String METHOD_PARAMETER = "method";
+    @NotNull
+    public final static String PAYLOAD_PARAMETER = "payload";
+    @NotNull
     public final static String FORMAT_PARAMETER = "format";
     @NotNull
     public final static String MULTIPLE_PARAMETER = "multiple";
@@ -120,6 +124,12 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
         String urlRaw = getValue(config, URL_PARAMETER, EMPTY_STRING);
         String url = buildType.getValueResolver().resolve(urlRaw).getResult();
 
+        String method = getValue(config, METHOD_PARAMETER, EMPTY_STRING);
+
+        String payloadRaw = getValue(config, PAYLOAD_PARAMETER, EMPTY_STRING);
+        String payload = buildType.getValueResolver().resolve(payloadRaw).getResult();
+
+
         String format = getValue(config, FORMAT_PARAMETER, EMPTY_STRING);
         Boolean multiple = getBoolValue(config, MULTIPLE_PARAMETER, EMPTY_STRING);
         String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);
@@ -128,7 +138,7 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
 
         errors.clear();
 
-        Options options = webOptionsManager.read(url, format, errors);
+        Options options = webOptionsManager.read(url, method, payload, format, errors);
         Collection<String> values = Lists.newArrayList(
                 Splitter.on(separator)
                         .trimResults()
