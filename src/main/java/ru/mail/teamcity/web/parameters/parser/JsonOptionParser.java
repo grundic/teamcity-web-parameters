@@ -14,7 +14,7 @@ import java.util.Map;
  * Date: 01.07.14
  * Time: 15:39
  */
-public class JsonOptionParser implements OptionParser {
+class JsonOptionParser implements OptionParser {
 
     @NotNull
     public String getId() {

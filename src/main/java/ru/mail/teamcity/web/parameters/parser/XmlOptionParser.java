@@ -16,7 +16,7 @@ import java.util.Map;
  * Date: 01.07.14
  * Time: 15:39
  */
-public class XmlOptionParser implements OptionParser {
+class XmlOptionParser implements OptionParser {
     @NotNull
     public String getId() {
         return "xml";
