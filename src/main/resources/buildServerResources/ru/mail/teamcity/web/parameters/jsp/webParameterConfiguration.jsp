@@ -22,9 +22,17 @@
     <th colspan="2">
         <div class="advancedSettingsToggle" id="advancedSettingsToggle" style="height: 0;">
             <i class="icon-wrench"></i><a href="javascript://" showdiscardchangesmessage="false">Show advanced
-            options</a>
+            request options</a>
         </div>
     </th>
+</tr>
+
+<tr class="advancedSetting advancedSettingHighlight hidden">
+    <th><label for="timeout">Request timeout:</label></th>
+    <td>
+        <props:textProperty name="timeout" className="longField"/>
+        <span class="smallNote">Request timeout in milliseconds</span>
+    </td>
 </tr>
 
 <tr class="advancedSetting advancedSettingHighlight hidden">

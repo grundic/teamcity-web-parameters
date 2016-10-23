@@ -36,7 +36,13 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
     @NotNull
     public final static String URL_PARAMETER = "url";
     @NotNull
+    public final static String TIMEOUT_PARAMETER = "timeout";
+    @NotNull
+    public final static String DEFAULT_TIMEOUT_PARAMETER = Integer.toString(60 * 1000);
+    @NotNull
     public final static String METHOD_PARAMETER = "method";
+    @NotNull
+    public final static String DEFAULT_METHOD_PARAMETER = "GET";
     @NotNull
     public final static String PAYLOAD_PARAMETER = "payload";
     @NotNull
@@ -116,6 +122,7 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
         ModelAndView modelAndView = new ModelAndView(pluginDescriptor.getPluginResourcesPath("ru/mail/teamcity/web/parameters/jsp/webParameterControl.jsp"));
 
         Map<String, String> config = context.getDescription().getParameterTypeArguments();
+        Map<String, String> extraOptions = new HashMap<>();
 
         String buildTypeId = request.getParameter(BUILD_TYPE_ID);
         SBuildType buildType = projectManager.findBuildTypeByExternalId(buildTypeId);
@@ -124,11 +131,16 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
         String urlRaw = getValue(config, URL_PARAMETER, EMPTY_STRING);
         String url = buildType.getValueResolver().resolve(urlRaw).getResult();
 
-        String method = getValue(config, METHOD_PARAMETER, EMPTY_STRING);
+        // extra parameters
+        String timeout = getValue(config, TIMEOUT_PARAMETER, DEFAULT_TIMEOUT_PARAMETER);
+        extraOptions.put(TIMEOUT_PARAMETER, timeout);
+
+        String method = getValue(config, METHOD_PARAMETER, DEFAULT_METHOD_PARAMETER);
+        extraOptions.put(METHOD_PARAMETER, method);
 
         String payloadRaw = getValue(config, PAYLOAD_PARAMETER, EMPTY_STRING);
         String payload = buildType.getValueResolver().resolve(payloadRaw).getResult();
-
+        extraOptions.put(PAYLOAD_PARAMETER, payload);
 
         String format = getValue(config, FORMAT_PARAMETER, EMPTY_STRING);
         Boolean multiple = getBoolValue(config, MULTIPLE_PARAMETER, EMPTY_STRING);
@@ -138,7 +150,7 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
 
         errors.clear();
 
-        Options options = webOptionsManager.read(url, method, payload, format, errors);
+        Options options = webOptionsManager.read(url, extraOptions, format, errors);
         Collection<String> values = Lists.newArrayList(
                 Splitter.on(separator)
                         .trimResults()

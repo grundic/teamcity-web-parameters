@@ -11,6 +11,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ru.mail.teamcity.web.parameters.provider.WebParameterProvider.METHOD_PARAMETER;
+import static ru.mail.teamcity.web.parameters.provider.WebParameterProvider.PAYLOAD_PARAMETER;
+import static ru.mail.teamcity.web.parameters.provider.WebParameterProvider.TIMEOUT_PARAMETER;
+
 /**
  * User: g.chernyshev
  * Date: 05/03/16
@@ -40,18 +44,25 @@ public class DynamicWebBuildStartContextProcessor implements BuildStartContextPr
                 String buildValue = context.getBuild().getBuildOwnParameters().get(parameter.getName());
                 // check if value from build is not provided and we don't have any default value
                 if (buildValue.isEmpty() && parameter.getValue().isEmpty()) {
+                    Map<String, String> extraOptions = new HashMap<>();
+
                     String urlRaw = description.getParameterTypeArguments().get(WebParameterProvider.URL_PARAMETER);
                     String url = buildType.getValueResolver().resolve(urlRaw).getResult();
 
-                    String method = description.getParameterTypeArguments().get(WebParameterProvider.METHOD_PARAMETER);
-                    
-                    String payloadRaw = description.getParameterTypeArguments().get(WebParameterProvider.PAYLOAD_PARAMETER);
+                    String timeout = description.getParameterTypeArguments().get(TIMEOUT_PARAMETER);
+                    extraOptions.put(TIMEOUT_PARAMETER, timeout);
+
+                    String method = description.getParameterTypeArguments().get(METHOD_PARAMETER);
+                    extraOptions.put(METHOD_PARAMETER, method);
+
+                    String payloadRaw = description.getParameterTypeArguments().get(PAYLOAD_PARAMETER);
                     String payload = buildType.getValueResolver().resolve(payloadRaw).getResult();
+                    extraOptions.put(PAYLOAD_PARAMETER, payload);
 
                     String format = description.getParameterTypeArguments().get(WebParameterProvider.FORMAT_PARAMETER);
                     Map<String, String> errors = new HashMap<>();
 
-                    Options options = webOptionsManager.read(url, method, payload, format, errors);
+                    Options options = webOptionsManager.read(url,extraOptions, format, errors);
                     for (Option option : options.getOptions()) {
                         if (option.isEnabled() && option.isDefault()) {
                             context.addSharedParameter(parameter.getName(), option.getValue());

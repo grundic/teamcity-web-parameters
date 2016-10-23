@@ -16,8 +16,7 @@ public interface WebOptionsManager {
     @NotNull
     public Options read(
             @NotNull String url,
-            @NotNull String method,
-            @Nullable String payload,
+            @NotNull Map<String, String> extraOptions,
             @NotNull String format,
             @NotNull Map<String, String> errors
     );

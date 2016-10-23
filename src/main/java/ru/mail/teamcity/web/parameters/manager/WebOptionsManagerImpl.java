@@ -1,5 +1,6 @@
 package ru.mail.teamcity.web.parameters.manager;
 
+import com.intellij.openapi.diagnostic.Logger;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -9,7 +10,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.mail.teamcity.web.parameters.data.Options;
@@ -24,6 +24,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ru.mail.teamcity.web.parameters.provider.WebParameterProvider.*;
+
 /**
  * User: g.chernyshev
  * Date: 29/06/14
@@ -31,14 +33,12 @@ import java.util.Map;
  */
 public class WebOptionsManagerImpl implements WebOptionsManager {
 
-    private final static Logger LOG = Logger.getLogger(WebOptionsManagerImpl.class);
-    private final static int DEFAULT_TIMEOUT = 60 * 1000;
+    private final static Logger LOG = Logger.getInstance(WebOptionsManagerImpl.class.getName());
 
     @NotNull
     public Options read(
             @NotNull String url,
-            @NotNull String method,
-            @Nullable String payload,
+            @NotNull Map<String, String> extraOptions,
             @NotNull String format,
             @NotNull Map<String, String> errors
     ) {
@@ -47,14 +47,22 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
 
         HttpRequestBase request;
         try {
-            request = getRequest(url, method, payload);
+            request = getRequest(url, extraOptions.get(METHOD_PARAMETER), extraOptions.get(PAYLOAD_PARAMETER));
         } catch (UnsupportedEncodingException | IllegalArgumentException e) {
             e.printStackTrace();
             errors.put("Failed to initialize request", e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
             return Options.empty();
         }
 
-        final RequestConfig params = RequestConfig.custom().setConnectTimeout(DEFAULT_TIMEOUT).setSocketTimeout(DEFAULT_TIMEOUT).build();
+        String stringTimeout = extraOptions.get(TIMEOUT_PARAMETER);
+        int timeout;
+        try {
+            timeout = Integer.valueOf(stringTimeout);
+        } catch (NumberFormatException e) {
+            timeout = Integer.valueOf(DEFAULT_TIMEOUT_PARAMETER);
+        }
+
+        final RequestConfig params = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout).build();
         request.setConfig(params);
         LOG.debug(String.format("Requesting parameters from %s", url));
 
@@ -63,7 +71,7 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             response = httpClient.execute(request);
         } catch (IOException e) {
             errors.put("Failed to execute request", e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
-            LOG.trace(e);
+            LOG.error(e);
             return Options.empty();
         }
 
@@ -79,12 +87,13 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             content = response.getEntity().getContent();
         } catch (IOException e) {
             errors.put("Failed to read content", e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
-            LOG.trace(e);
+            LOG.error(e);
             return Options.empty();
         }
-        request.releaseConnection();
 
         options = parse(content, format, errors);
+        request.releaseConnection();
+
         return null == options ? Options.empty() : options;
     }
 
