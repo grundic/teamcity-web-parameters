@@ -29,7 +29,7 @@ public class XmlOptionParser implements OptionParser {
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             return unmarshaller.unmarshal(new StreamSource(inputStream), Options.class).getValue();
         } catch (JAXBException e) {
-            errors.put("Failed to parse Xml format", e.getCause().getMessage());
+            errors.put("Failed to parse Xml format", e.toString());
         }
         return null;
     }

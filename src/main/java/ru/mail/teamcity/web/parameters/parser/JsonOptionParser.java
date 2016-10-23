@@ -27,7 +27,7 @@ public class JsonOptionParser implements OptionParser {
         try {
             return objectMapper.readValue(inputStream, Options.class);
         } catch (IOException e) {
-            errors.put("Failed to parse Json format", e.getCause().getMessage());
+            errors.put("Failed to parse Json format", e.toString());
         }
         return null;
     }
