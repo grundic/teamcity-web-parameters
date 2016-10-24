@@ -58,6 +58,18 @@
     </td>
 </tr>
 
+<tr class="advancedSetting advancedSettingHighlight hidden">
+    <th><label>Headers:</label></th>
+    <td>
+        <div class="completionIconWrapper">
+            <props:multilineProperty name="headers" linkTitle="Request headers"
+                                     cols="60" rows="3" className="longField autocompletionProperty"
+                                     expanded="false"/>
+        </div>
+        <span class="smallNote">New line separated list of headers.<br>Each line should be in format &lt;name&gt;:&lt;value&gt;.</span>
+    </td>
+</tr>
+
 <%--Advanced options end --%>
 
 <tr>
@@ -113,9 +125,14 @@
 
             $j('#method').on('change', this.updatePayloadRowVisibility);
             this.updatePayloadRowVisibility();
+            this.expandPayload();
+
+            this.expandHeaders();
 
             this.addAutocomplete();
             this.advancedSettingsToggle();
+
+            BS.MultilineProperties.updateVisible();
         },
 
         toggleMultipleSeparator: function () {
@@ -146,16 +163,25 @@
                 $j(".advancedSetting").toggle();
                 that.updatePayloadRowVisibility();
             });
+            BS.MultilineProperties.updateVisible();
         },
 
         updatePayloadRowVisibility: function () {
             var visible = ($j('#method').is(":visible")) && ($j('#method').val() === 'POST');
             visible ? $j("#payloadRow").show() : $j("#payloadRow").hide();
+            BS.MultilineProperties.updateVisible();
+        },
 
+        expandPayload: function () {
             if ($j('#payload').val()){
                 BS.MultilineProperties.setVisible('payload', true);
             }
-            BS.MultilineProperties.updateVisible();
+        },
+
+        expandHeaders: function () {
+            if ($j('#headers').val()){
+                BS.MultilineProperties.setVisible('headers', true);
+            }
         }
     };
 

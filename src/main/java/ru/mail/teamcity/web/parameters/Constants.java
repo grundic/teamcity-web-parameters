@@ -23,6 +23,12 @@ public class Constants {
     @NotNull
     public final static String PAYLOAD_PARAMETER = "payload";
     @NotNull
+    public final static String HEADERS_PARAMETER = "headers";
+    @NotNull
+    public final static String HEADERS_SEPARATOR = "\n";
+    @NotNull
+    public final static String HEADERS_NAME_VALUE_SEPARATOR = ":";
+    @NotNull
     public final static String FORMAT_PARAMETER = "format";
     @NotNull
     public final static String MULTIPLE_PARAMETER = "multiple";

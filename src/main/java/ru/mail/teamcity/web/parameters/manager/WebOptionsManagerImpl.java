@@ -1,5 +1,6 @@
 package ru.mail.teamcity.web.parameters.manager;
 
+import com.google.common.base.Splitter;
 import com.intellij.openapi.diagnostic.Logger;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -52,6 +53,24 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             e.printStackTrace();
             errors.put("Failed to initialize request", e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
             return Options.empty();
+        }
+
+        String headers = extraOptions.get(HEADERS_PARAMETER);
+        if (null != headers) {
+            try {
+                Map<String, String> headersMap = Splitter.on(HEADERS_SEPARATOR).
+                        trimResults().
+                        omitEmptyStrings().
+                        withKeyValueSeparator(Splitter.on(HEADERS_NAME_VALUE_SEPARATOR).limit(2)).
+                        split(headers);
+
+                for (Map.Entry<String, String> header : headersMap.entrySet()) {
+                    request.addHeader(header.getKey(), header.getValue());
+                }
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                errors.put("Incorrect header", e.toString());
+            }
         }
 
         String stringTimeout = extraOptions.get(TIMEOUT_PARAMETER);

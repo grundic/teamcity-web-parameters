@@ -56,6 +56,10 @@ public class DynamicWebBuildStartContextProcessor implements BuildStartContextPr
                     String payload = buildType.getValueResolver().resolve(payloadRaw).getResult();
                     extraOptions.put(PAYLOAD_PARAMETER, payload);
 
+                    String headersRaw = description.getParameterTypeArguments().get(HEADERS_PARAMETER);
+                    String headers = buildType.getValueResolver().resolve(headersRaw).getResult();
+                    extraOptions.put(HEADERS_PARAMETER, headers);
+
                     String format = description.getParameterTypeArguments().get(Constants.FORMAT_PARAMETER);
                     Map<String, String> errors = new HashMap<>();
 

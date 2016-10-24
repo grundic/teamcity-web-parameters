@@ -105,6 +105,10 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
         String payload = buildType.getValueResolver().resolve(payloadRaw).getResult();
         extraOptions.put(PAYLOAD_PARAMETER, payload);
 
+        String headersRaw = getValue(config, HEADERS_PARAMETER, EMPTY_STRING);
+        String headers = buildType.getValueResolver().resolve(headersRaw).getResult();
+        extraOptions.put(HEADERS_PARAMETER, headers);
+
         String format = getValue(config, FORMAT_PARAMETER, EMPTY_STRING);
         Boolean multiple = getBoolValue(config, MULTIPLE_PARAMETER, EMPTY_STRING);
         String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);
