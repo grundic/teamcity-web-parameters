@@ -11,6 +11,8 @@ public class Constants {
     @NotNull
     public final static String PARAMETER_TYPE = "webPopulatedSelect";
     @NotNull
+    public final static String PARAMETER_DESCRIPTION = "Web populated select";
+    @NotNull
     public final static String URL_PARAMETER = "url";
     @NotNull
     public final static String TIMEOUT_PARAMETER = "timeout";

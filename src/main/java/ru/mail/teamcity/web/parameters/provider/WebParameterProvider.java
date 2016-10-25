@@ -62,7 +62,7 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
     @NotNull
     @Override
     public String getParameterDescription() {
-        return "Web populated select";
+        return PARAMETER_DESCRIPTION;
     }
 
     @NotNull
