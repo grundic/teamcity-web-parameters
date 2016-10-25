@@ -70,6 +70,23 @@
     </td>
 </tr>
 
+<tr class="advancedSetting advancedSettingHighlight hidden">
+    <th rowspan="2" style="vertical-align: middle"><label>Basic Authorization:</label></th>
+    <td>
+        <props:textProperty name="username" className="longField"/>
+        <span class="smallNote">Username</span>
+    </td>
+</tr>
+
+<tr class="advancedSetting advancedSettingHighlight hidden">
+    <td>
+        <props:textProperty name="password" className="longField"/>
+        <span class="smallNote">Password (unfortunately it doesn't work with masked input)<br>
+            For now you can use another %PARAMETER% as a reference, which could be 'Password' type.
+        </span>
+    </td>
+</tr>
+
 <%--Advanced options end --%>
 
 <tr>
@@ -173,13 +190,13 @@
         },
 
         expandPayload: function () {
-            if ($j('#payload').val()){
+            if ($j('#payload').val()) {
                 BS.MultilineProperties.setVisible('payload', true);
             }
         },
 
         expandHeaders: function () {
-            if ($j('#headers').val()){
+            if ($j('#headers').val()) {
                 BS.MultilineProperties.setVisible('headers', true);
             }
         }

@@ -109,6 +109,14 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
         String headers = buildType.getValueResolver().resolve(headersRaw).getResult();
         extraOptions.put(HEADERS_PARAMETER, headers);
 
+        String usernameRaw = getValue(config, USERNAME_PARAMETER, EMPTY_STRING);
+        String username = buildType.getValueResolver().resolve(usernameRaw).getResult();
+        extraOptions.put(USERNAME_PARAMETER, username);
+
+        String passwordRaw = getValue(config, PASSWORD_PARAMETER, EMPTY_STRING);
+        String password = buildType.getValueResolver().resolve(passwordRaw).getResult();
+        extraOptions.put(PASSWORD_PARAMETER, password);
+
         String format = getValue(config, FORMAT_PARAMETER, EMPTY_STRING);
         Boolean multiple = getBoolValue(config, MULTIPLE_PARAMETER, EMPTY_STRING);
         String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);

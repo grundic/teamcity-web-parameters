@@ -29,6 +29,10 @@ public class Constants {
     @NotNull
     public final static String HEADERS_NAME_VALUE_SEPARATOR = ":";
     @NotNull
+    public final static String USERNAME_PARAMETER = "username";
+    @NotNull
+    public final static String PASSWORD_PARAMETER = "password";
+    @NotNull
     public final static String FORMAT_PARAMETER = "format";
     @NotNull
     public final static String MULTIPLE_PARAMETER = "multiple";

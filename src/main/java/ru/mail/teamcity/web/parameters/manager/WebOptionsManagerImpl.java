@@ -2,7 +2,10 @@ package ru.mail.teamcity.web.parameters.manager;
 
 import com.google.common.base.Splitter;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.text.StringUtil;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -21,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +57,15 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             e.printStackTrace();
             errors.put("Failed to initialize request", e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
             return Options.empty();
+        }
+
+        String username = extraOptions.get(USERNAME_PARAMETER);
+        String password = extraOptions.get(PASSWORD_PARAMETER);
+        if (!StringUtil.isEmpty(username) && !StringUtil.isEmpty(password)){
+            String auth = String.format("%s:%s", username, password);
+            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("ISO-8859-1")));
+            String authHeader = "Basic " + new String(encodedAuth);
+            request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
         }
 
         String headers = extraOptions.get(HEADERS_PARAMETER);
