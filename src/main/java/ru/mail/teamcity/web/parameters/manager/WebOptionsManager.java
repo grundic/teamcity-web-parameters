@@ -14,13 +14,8 @@ import java.util.Map;
  */
 public interface WebOptionsManager {
     @NotNull
-    public Options read(
-            @NotNull String url,
-            @NotNull Map<String, String> extraOptions,
-            @NotNull String format,
-            @NotNull Map<String, String> errors
-    );
+    Options read(@NotNull RequestConfiguration configuration, @NotNull Map<String, String> errors);
 
     @Nullable
-    public OptionParser guess(@NotNull String url, @NotNull Map<String, String> errors);
+    OptionParser guess(@NotNull String url, @NotNull Map<String, String> errors);
 }

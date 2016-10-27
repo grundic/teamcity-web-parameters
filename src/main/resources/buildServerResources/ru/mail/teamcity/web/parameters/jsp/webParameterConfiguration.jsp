@@ -3,6 +3,8 @@
 <jsp:useBean id="context" scope="request" type="jetbrains.buildServer.controllers.parameters.ParameterEditContext"/>
 <jsp:useBean id="parsers" scope="request"
              type="java.util.ArrayList<ru.mail.teamcity.web.parameters.parser.OptionParser>"/>
+<jsp:useBean id="availableMethods" scope="request"
+             type="java.util.List<ru.mail.teamcity.web.parameters.manager.RequestConfiguration.Method>"/>
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
 
@@ -39,8 +41,9 @@
     <th><label>Request method:</label></th>
     <td>
         <props:selectProperty name="method">
-            <props:option value="GET">GET</props:option>
-            <props:option value="POST">POST</props:option>
+            <c:forEach var="method" items="${availableMethods}">
+                <props:option value="${method.name()}">${method.name()}</props:option>
+            </c:forEach>
         </props:selectProperty>
         <span class="smallNote">Select request method for getting options.</span>
     </td>
@@ -73,14 +76,18 @@
 <tr class="advancedSetting advancedSettingHighlight hidden">
     <th rowspan="2" style="vertical-align: middle"><label>Basic Authorization:</label></th>
     <td>
-        <props:textProperty name="username" className="longField"/>
-        <span class="smallNote">Username</span>
+        <div class="completionIconWrapper">
+            <props:textProperty name="username" className="longField autocompletionProperty"/>
+            <div class="completionIconWrapper">
+                <span class="smallNote">Username</span>
     </td>
 </tr>
 
 <tr class="advancedSetting advancedSettingHighlight hidden">
     <td>
-        <props:textProperty name="password" className="longField"/>
+        <div class="completionIconWrapper">
+            <props:textProperty name="password" className="longField autocompletionProperty"/>
+            <div class="completionIconWrapper">
         <span class="smallNote">Password (unfortunately it doesn't work with masked input)<br>
             For now you can use another %PARAMETER% as a reference, which could be 'Password' type.
         </span>
@@ -109,9 +116,9 @@
 </tr>
 
 <tr id="multipleSeparator">
-    <th><label for="valueSeparator">Value separator:</label></th>
+    <th><label for="multipleSeparator">Value separator:</label></th>
     <td>
-        <props:textProperty name="valueSeparator" className="longField"/>
+        <props:textProperty name="multipleSeparator" className="longField"/>
         <span class="smallNote">Specify multiple selected items separator. Leave blank to use ','.</span>
     </td>
 </tr>

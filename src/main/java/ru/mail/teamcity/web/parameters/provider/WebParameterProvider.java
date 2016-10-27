@@ -3,6 +3,7 @@ package ru.mail.teamcity.web.parameters.provider;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.intellij.openapi.diagnostic.Logger;
 import jetbrains.buildServer.controllers.parameters.InvalidParametersException;
 import jetbrains.buildServer.controllers.parameters.ParameterEditContext;
 import jetbrains.buildServer.controllers.parameters.ParameterRenderContext;
@@ -15,16 +16,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.servlet.ModelAndView;
 import ru.mail.teamcity.web.parameters.data.Options;
+import ru.mail.teamcity.web.parameters.manager.RequestConfiguration;
+import ru.mail.teamcity.web.parameters.manager.ValueExtractor;
 import ru.mail.teamcity.web.parameters.manager.WebOptionsManager;
+import ru.mail.teamcity.web.parameters.manager.WebOptionsManagerImpl;
 import ru.mail.teamcity.web.parameters.parser.ParserFactory;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static ru.mail.teamcity.web.parameters.Constants.*;
+import static ru.mail.teamcity.web.parameters.manager.RequestConfiguration.DEFAULT_MULTIPLE_SEPARATOR;
 
 /**
  * User: g.chernyshev
@@ -32,6 +34,8 @@ import static ru.mail.teamcity.web.parameters.Constants.*;
  * Time: 17:51
  */
 public class WebParameterProvider extends ParameterControlProviderAdapter {
+
+    private final static Logger LOG = Logger.getInstance(WebOptionsManagerImpl.class.getName());
 
     @NotNull
     private final PluginDescriptor pluginDescriptor;
@@ -66,78 +70,46 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
     }
 
     @NotNull
-    private String getValue(@NotNull Map<String, String> config, @NotNull String key, @NotNull String defaultValue) {
-        String value = config.get(key);
-        if (null == value) {
-            return defaultValue;
-        }
-        return value;
-    }
-
-    private Boolean getBoolValue(@NotNull Map<String, String> config, @NotNull String key, @NotNull String defaultValue) {
-        String value = getValue(config, key, defaultValue);
-        return Boolean.parseBoolean(value);
-    }
-
-    @NotNull
     @Override
     public ModelAndView renderControl(@NotNull HttpServletRequest request, @NotNull ParameterRenderContext context) throws InvalidParametersException {
         ModelAndView modelAndView = new ModelAndView(pluginDescriptor.getPluginResourcesPath("ru/mail/teamcity/web/parameters/jsp/webParameterControl.jsp"));
-
-        Map<String, String> config = context.getDescription().getParameterTypeArguments();
-        Map<String, String> extraOptions = new HashMap<>();
 
         String buildTypeId = request.getParameter(BUILD_TYPE_ID);
         SBuildType buildType = projectManager.findBuildTypeByExternalId(buildTypeId);
         assert buildType != null;
 
-        String urlRaw = getValue(config, URL_PARAMETER, EMPTY_STRING);
-        String url = buildType.getValueResolver().resolve(urlRaw).getResult();
-
-        // extra parameters
-        String timeout = getValue(config, TIMEOUT_PARAMETER, DEFAULT_TIMEOUT_PARAMETER);
-        extraOptions.put(TIMEOUT_PARAMETER, timeout);
-
-        String method = getValue(config, METHOD_PARAMETER, DEFAULT_METHOD_PARAMETER);
-        extraOptions.put(METHOD_PARAMETER, method);
-
-        String payloadRaw = getValue(config, PAYLOAD_PARAMETER, EMPTY_STRING);
-        String payload = buildType.getValueResolver().resolve(payloadRaw).getResult();
-        extraOptions.put(PAYLOAD_PARAMETER, payload);
-
-        String headersRaw = getValue(config, HEADERS_PARAMETER, EMPTY_STRING);
-        String headers = buildType.getValueResolver().resolve(headersRaw).getResult();
-        extraOptions.put(HEADERS_PARAMETER, headers);
-
-        String usernameRaw = getValue(config, USERNAME_PARAMETER, EMPTY_STRING);
-        String username = buildType.getValueResolver().resolve(usernameRaw).getResult();
-        extraOptions.put(USERNAME_PARAMETER, username);
-
-        String passwordRaw = getValue(config, PASSWORD_PARAMETER, EMPTY_STRING);
-        String password = buildType.getValueResolver().resolve(passwordRaw).getResult();
-        extraOptions.put(PASSWORD_PARAMETER, password);
-
-        String format = getValue(config, FORMAT_PARAMETER, EMPTY_STRING);
-        Boolean multiple = getBoolValue(config, MULTIPLE_PARAMETER, EMPTY_STRING);
-        String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);
-        Boolean tagSupport = getBoolValue(config, TAG_SUPPORT_PARAMETER, EMPTY_STRING);
-        Boolean enableEditOnError = getBoolValue(config, ENABLE_EDIT_ON_ERROR_PARAMETER, EMPTY_STRING);
-
         errors.clear();
 
-        Options options = webOptionsManager.read(url, extraOptions, format, errors);
-        Collection<String> values = Lists.newArrayList(
-                Splitter.on(separator)
-                        .trimResults()
-                        .omitEmptyStrings()
-                        .split(context.getParameter().getValue())
-        );
+        Map<String, String> config = context.getDescription().getParameterTypeArguments();
+        RequestConfiguration configuration = new RequestConfiguration(config, buildType.getValueResolver());
+        Options options = Options.empty();
+        Collection<String> values = Collections.emptyList();
+
+        try {
+            configuration.process();
+
+            options = webOptionsManager.read(configuration, errors);
+
+            values = Lists.newArrayList(
+                    Splitter.on(configuration.getMultipleSeparator())
+                            .trimResults()
+                            .omitEmptyStrings()
+                            .split(context.getParameter().getValue())
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOG.error(e);
+            errors.put("Unexpected web-parameters error", e.toString());
+        }
 
         modelAndView.getModel().put(OPTIONS_NAME, options);
         modelAndView.getModel().put(VALUES_NAME, values);
-        modelAndView.getModel().put(MULTIPLE_PARAMETER, multiple);
-        modelAndView.getModel().put(TAG_SUPPORT_PARAMETER, tagSupport);
-        modelAndView.getModel().put(ENABLE_EDIT_ON_ERROR_PARAMETER, enableEditOnError);
+
+
+        modelAndView.getModel().put(MULTIPLE_PARAMETER, configuration.getMultiple());
+        modelAndView.getModel().put(TAG_SUPPORT_PARAMETER, configuration.getTagSupport());
+        modelAndView.getModel().put(ENABLE_EDIT_ON_ERROR_PARAMETER, configuration.getEnableEditOnError());
+
         modelAndView.getModel().put(ERRORS_NAME, errors);
         return modelAndView;
     }
@@ -147,6 +119,8 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
     public ModelAndView renderSpecEditor(@NotNull HttpServletRequest request, @NotNull ParameterEditContext parameterEditContext) throws InvalidParametersException {
         ModelAndView modelAndView = new ModelAndView(pluginDescriptor.getPluginResourcesPath("ru/mail/teamcity/web/parameters/jsp/webParameterConfiguration.jsp"));
         modelAndView.getModel().put(PARSERS_NAME, ParserFactory.registry);
+        modelAndView.getModel().put(AVAILABLE_METHODS_PARAMETER, Arrays.asList(RequestConfiguration.Method.values()));
+
         return modelAndView;
     }
 
@@ -155,7 +129,7 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
     public String convertParameterValue(@NotNull HttpServletRequest httpServletRequest, @NotNull ParameterRenderContext context, @Nullable String s) throws InvalidParametersException {
         Map<String, String> config = context.getDescription().getParameterTypeArguments();
 
-        String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);
+        String separator = ValueExtractor.getValue(config, MULTIPLE_SEPARATOR_PARAMETER, DEFAULT_MULTIPLE_SEPARATOR);
 
         Joiner joiner = Joiner.on(separator).skipNulls();
         String[] values = httpServletRequest.getParameterValues(context.getId());
@@ -172,9 +146,9 @@ public class WebParameterProvider extends ParameterControlProviderAdapter {
 
         Map<String, String> config = context.getDescription().getParameterTypeArguments();
 
-        String separator = getValue(config, VALUE_SEPARATOR_PARAMETER, DEFAULT_VALUE_SEPARATOR);
+        String separator = ValueExtractor.getValue(config, MULTIPLE_SEPARATOR_PARAMETER, DEFAULT_MULTIPLE_SEPARATOR);
         String[] values = httpServletRequest.getParameterValues(context.getId());
-        if (null == values){
+        if (null == values) {
             return result;
         }
 

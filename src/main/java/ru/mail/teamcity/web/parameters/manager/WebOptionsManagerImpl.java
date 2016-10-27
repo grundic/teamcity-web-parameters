@@ -1,9 +1,7 @@
 package ru.mail.teamcity.web.parameters.manager;
 
-import com.google.common.base.Splitter;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
@@ -24,12 +22,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-
-import static ru.mail.teamcity.web.parameters.Constants.*;
 
 /**
  * User: g.chernyshev
@@ -42,67 +37,36 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
 
     @NotNull
     public Options read(
-            @NotNull String url,
-            @NotNull Map<String, String> extraOptions,
-            @NotNull String format,
+            @NotNull RequestConfiguration configuration,
             @NotNull Map<String, String> errors
     ) {
         Options options;
         HttpClient httpClient = HttpClientBuilder.create().build();
 
-        HttpRequestBase request;
+        @NotNull HttpRequestBase request;
         try {
-            request = getRequest(url, extraOptions.get(METHOD_PARAMETER), extraOptions.get(PAYLOAD_PARAMETER));
+            request = getRequest(configuration);
         } catch (UnsupportedEncodingException | IllegalArgumentException e) {
             e.printStackTrace();
-            errors.put("Failed to initialize request", e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
+            errors.put("Failed to initialize request", e.toString());
             return Options.empty();
         }
 
-        String username = extraOptions.get(USERNAME_PARAMETER);
-        String password = extraOptions.get(PASSWORD_PARAMETER);
-        if (!StringUtil.isEmpty(username) && !StringUtil.isEmpty(password)){
-            String auth = String.format("%s:%s", username, password);
-            byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("ISO-8859-1")));
-            String authHeader = "Basic " + new String(encodedAuth);
-            request.setHeader(HttpHeaders.AUTHORIZATION, authHeader);
+        if (!StringUtil.isEmpty(configuration.getBasicAuthorisation())) {
+            request.setHeader(HttpHeaders.AUTHORIZATION, configuration.getBasicAuthorisation());
         }
 
-        String headers = extraOptions.get(HEADERS_PARAMETER);
-        if (null != headers) {
-            try {
-                Map<String, String> headersMap = Splitter.on(HEADERS_SEPARATOR).
-                        trimResults().
-                        omitEmptyStrings().
-                        withKeyValueSeparator(Splitter.on(HEADERS_NAME_VALUE_SEPARATOR).limit(2)).
-                        split(headers);
+        configuration.getHeaders().forEach(request::addHeader);
 
-                for (Map.Entry<String, String> header : headersMap.entrySet()) {
-                    request.addHeader(header.getKey(), header.getValue());
-                }
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-                errors.put("Incorrect header", e.toString());
-            }
-        }
-
-        String stringTimeout = extraOptions.get(TIMEOUT_PARAMETER);
-        int timeout;
-        try {
-            timeout = Integer.valueOf(stringTimeout);
-        } catch (NumberFormatException e) {
-            timeout = Integer.valueOf(DEFAULT_TIMEOUT_PARAMETER);
-        }
-
-        final RequestConfig params = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout).build();
+        final RequestConfig params = RequestConfig.custom().setConnectTimeout(configuration.getTimeout()).setSocketTimeout(configuration.getTimeout()).build();
         request.setConfig(params);
-        LOG.debug(String.format("Requesting parameters from %s", url));
+        LOG.debug(String.format("Requesting dynamic parameters from %s", configuration.getUrl()));
 
         HttpResponse response;
         try {
             response = httpClient.execute(request);
         } catch (IOException e) {
-            errors.put("Failed to execute request", e.getMessage() != null ? e.getMessage() : e.getCause().getMessage());
+            errors.put("Failed to execute request", e.toString());
             LOG.error(e);
             return Options.empty();
         }
@@ -123,24 +87,24 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             return Options.empty();
         }
 
-        options = parse(content, format, errors);
+        options = configuration.getParser().parse(content, errors);
         request.releaseConnection();
 
         return null == options ? Options.empty() : options;
     }
 
     @NotNull
-    private HttpRequestBase getRequest(@NotNull String url, @NotNull String method, @Nullable String payload) throws UnsupportedEncodingException, IllegalArgumentException {
-        if (method.equalsIgnoreCase(HttpGet.METHOD_NAME)) {
-            return new HttpGet(url);
-        } else if (method.equalsIgnoreCase(HttpPost.METHOD_NAME)) {
-            HttpPost request = new HttpPost(url);
-            if (null != payload) {
-                request.setEntity(new StringEntity(payload));
+    private HttpRequestBase getRequest(@NotNull RequestConfiguration configuration) throws UnsupportedEncodingException, IllegalArgumentException {
+        if (configuration.getMethod().name().equalsIgnoreCase(HttpGet.METHOD_NAME)) {
+            return new HttpGet(configuration.getUrl());
+        } else if (configuration.getMethod().name().equalsIgnoreCase(HttpPost.METHOD_NAME)) {
+            HttpPost request = new HttpPost(configuration.getUrl());
+            if (!StringUtil.isEmpty(configuration.getPayload())) {
+                request.setEntity(new StringEntity(configuration.getPayload()));
             }
             return request;
         } else {
-            throw new IllegalArgumentException(String.format("Request method got unexpected value '%s'!", method));
+            throw new IllegalArgumentException(String.format("Request method got unexpected value '%s'!", configuration.getMethod().name()));
         }
     }
 
@@ -174,15 +138,6 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             errors.put("Failed to execute request", e.getMessage());
         } finally {
             getRequest.releaseConnection();
-        }
-        return null;
-    }
-
-    @Nullable
-    private Options parse(@NotNull InputStream inputStream, @NotNull String format, @NotNull Map<String, String> errors) {
-        OptionParser parser = ParserFactory.getOptionParser(format);
-        if (null != parser) {
-            return parser.parse(inputStream, errors);
         }
         return null;
     }

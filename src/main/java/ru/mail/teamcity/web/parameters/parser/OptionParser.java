@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public interface OptionParser {
     @NotNull
-    public String getId();
+    String getId();
 
     @Nullable
-    public Options parse(InputStream inputStream, @NotNull Map<String, String> errors);
+    Options parse(InputStream inputStream, @NotNull Map<String, String> errors);
 }
