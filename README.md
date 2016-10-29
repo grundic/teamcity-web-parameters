@@ -96,7 +96,7 @@ Configuration options description
 | ----------- | ----------- |
 | URL | Url for requesting options, e.g. `http://localhost:8090`. This parameter could also use other parameters for expanding it's value: `http://%HOST%:%PORT%`. |
 | Request timeout | Timeout of a request. This is optional parameter, by default set to 1 minute (60,000 ms). |
-| Request method: | Method (verb) of a request. Currently `GET` and `POST` are supported. |
+| Request method | Method (verb) of a request. Currently `GET` and `POST` are supported. |
 | Payload | Payload data to send to the server. This is optional parameter and only available for `POST` requests. |
 | Headers | List of headers to send to the server. Every header should be on a new line and separated with colon: `header-name: header-value`. |
 | Basic Authorization | It's possible to configure basic authorisation for server with options. In this case, provide username and password to corresponding fields. Please note, that currently it's not possible to mask password in this window, so it would be visible on a screen. |
@@ -104,7 +104,7 @@ Configuration options description
 | Allow multiple | Flag for configuring select component: if checked, user could select multiple values from drop box, which would be separated by given separator. |
 | Value separator | Separator to use for multiple options. But default `,` would be used. |
 | Tag support | Flag for configuring select component: if checked, it would be possible to enter new values into the drop box. |
-| Enable edit on error: | This flag controls whether it's possible to enter user value in cause of unpredictable error. |
+| Enable edit on error | This flag controls whether it's possible to enter user value in cause of unpredictable error. |
 
 License
 -------
