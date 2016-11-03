@@ -13,7 +13,7 @@ apply plugin: 'java'
 apply plugin: 'com.github.rodm.teamcity-server'
 
 group = 'ru.mail.teamcity'
-version = '1.6.0'
+version = '1.6.1'
 
 repositories {
     mavenCentral()

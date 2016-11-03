@@ -81,7 +81,7 @@ public class RequestConfiguration {
     public void process() {
         this.url = extractor.getExpandedRequiredValue(URL_PARAMETER);
         this.timeout = extractor.getIntegerValue(TIMEOUT_PARAMETER, DEFAULT_TIMEOUT);
-        this.method = Method.valueOf(extractor.getRequiredValue(METHOD_PARAMETER));
+        this.method = Method.valueOf(extractor.getValue(METHOD_PARAMETER, Method.GET.toString()));
         this.payload = extractor.getExpandedValue(PAYLOAD_PARAMETER, EMPTY_STRING);
         this.headers = extractHeaders();
         this.username = extractor.getExpandedValue(USERNAME_PARAMETER, EMPTY_STRING);
