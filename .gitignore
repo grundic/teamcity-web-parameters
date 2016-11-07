@@ -7,7 +7,7 @@
 
 classes/
 .gradle/
-build/
+/build/
 out/
 target/
 *.iml
