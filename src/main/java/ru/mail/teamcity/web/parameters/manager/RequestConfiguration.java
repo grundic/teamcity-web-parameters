@@ -208,6 +208,22 @@ public class RequestConfiguration {
         }
         return enableEditOnError;
     }
+
+    @Override
+    public String toString() {
+        return "RequestConfiguration{" +
+                "url='" + url + '\'' +
+                ", timeout=" + timeout +
+                ", method=" + method +
+                ", payload='" + payload + '\'' +
+                ", headers=" + headers +
+                ", format='" + format + '\'' +
+                ", multiple=" + multiple +
+                ", multipleSeparator='" + multipleSeparator + '\'' +
+                ", tagSupport=" + tagSupport +
+                ", enableEditOnError=" + enableEditOnError +
+                '}';
+    }
 }
 
 

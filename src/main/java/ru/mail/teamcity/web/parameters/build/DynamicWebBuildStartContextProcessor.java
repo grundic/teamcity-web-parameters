@@ -50,8 +50,9 @@ public class DynamicWebBuildStartContextProcessor implements BuildStartContextPr
 
                     Options options = webOptionsManager.read(configuration, errors);
                     if (!errors.isEmpty()) {
-                        throw new RuntimeException("Something went wrong during web parameters initialization:\n" +
-                                Joiner.on("\n").join(errors.values())
+                        throw new RuntimeException(String.format(
+                                "Something went wrong during '%s' web parameter initialization:\n%s\n%s",
+                                parameter.getName(), configuration.toString(), Joiner.on("\n").join(errors.values()))
                         );
                     }
 
