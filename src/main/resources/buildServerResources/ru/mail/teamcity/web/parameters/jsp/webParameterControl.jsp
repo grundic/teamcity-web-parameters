@@ -17,25 +17,26 @@
 <link rel="stylesheet" type="text/css"
       href="${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/css/select2-bootstrap.min.css">
 
-<script type="text/javascript">
-    function addScript(src, callback) {
-        var scriptElement = document.createElement('script');
-        scriptElement.setAttribute('src', src);
-        scriptElement.onload = callback;
-        document.body.appendChild(scriptElement);
-    }
-
-    $j(document).ready(function ($) {
-        addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/select2.full.min.js", function () {
-            addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/webParametersControl.js", function () {
-                WebParametersControl.init("${context.id}");
-            });
-        });
-    });
-</script>
-
 <c:choose>
     <c:when test="${empty errors}">
+
+        <script type="text/javascript">
+            function addScript(src, callback) {
+                var scriptElement = document.createElement('script');
+                scriptElement.setAttribute('src', src);
+                scriptElement.onload = callback;
+                document.body.appendChild(scriptElement);
+            }
+
+            $j(document).ready(function ($) {
+                addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/select2.full.min.js", function () {
+                    addScript("${teamcityPluginResourcesPath}/ru/mail/teamcity/web/parameters/js/webParametersControl.js", function () {
+                        WebParametersControl.init("${context.id}");
+                    });
+                });
+            });
+        </script>
+
         <c:set var="selectedKey" value="${context.parameter.value}"/>
 
         <select

@@ -89,8 +89,8 @@ public class RequestConfiguration {
         this.format = extractor.getRequiredValue(FORMAT_PARAMETER);
         this.multiple = extractor.getBoolValue(MULTIPLE_PARAMETER, DEFAULT_MULTIPLE);
         this.multipleSeparator = extractor.getValue(MULTIPLE_SEPARATOR_PARAMETER, DEFAULT_MULTIPLE_SEPARATOR);
-        this.tagSupport = extractor.getBoolValue(MULTIPLE_PARAMETER, DEFAULT_TAG_SUPPORT);
-        this.enableEditOnError = extractor.getBoolValue(MULTIPLE_PARAMETER, DEFAULT_EDIT_ON_ERROR);
+        this.tagSupport = extractor.getBoolValue(TAG_SUPPORT_PARAMETER, DEFAULT_TAG_SUPPORT);
+        this.enableEditOnError = extractor.getBoolValue(ENABLE_EDIT_ON_ERROR_PARAMETER, DEFAULT_EDIT_ON_ERROR);
     }
 
 
