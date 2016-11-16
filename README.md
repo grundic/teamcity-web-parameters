@@ -79,6 +79,8 @@ Also there is `processes_web_server.py` script, which can be used to demonstrate
 processes on a host machine and uses name/pid for key/value. Please note, that it uses `psutil` library, so you migth need to
 install it: ```pip install psutil```.
 
+JSON transformations
+--------------------
 Sometimes it's not possible to provide data in required format, for example if you would like to get JSON produced by
 external service. In this case you can configure JSON transformation, which should convert some JSON data to format,
 expected by plugin. The transformation is handled by external library [jolt](https://github.com/bazaarvoice/jolt). You
