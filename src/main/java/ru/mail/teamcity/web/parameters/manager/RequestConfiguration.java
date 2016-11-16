@@ -66,6 +66,8 @@ public class RequestConfiguration {
     @Nullable
     private String format;
     @Nullable
+    private String transform;
+    @Nullable
     private Boolean multiple;
     @Nullable
     private String multipleSeparator;
@@ -87,6 +89,7 @@ public class RequestConfiguration {
         this.username = extractor.getExpandedValue(USERNAME_PARAMETER, EMPTY_STRING);
         this.password = extractor.getExpandedValue(PASSWORD_PARAMETER, EMPTY_STRING);
         this.format = extractor.getRequiredValue(FORMAT_PARAMETER);
+        this.transform = extractor.getExpandedValue(TRANSFORM_PARAMETER, EMPTY_STRING);
         this.multiple = extractor.getBoolValue(MULTIPLE_PARAMETER, DEFAULT_MULTIPLE);
         this.multipleSeparator = extractor.getValue(MULTIPLE_SEPARATOR_PARAMETER, DEFAULT_MULTIPLE_SEPARATOR);
         this.tagSupport = extractor.getBoolValue(TAG_SUPPORT_PARAMETER, DEFAULT_TAG_SUPPORT);
@@ -175,6 +178,11 @@ public class RequestConfiguration {
             throw new RequestConfigurationException(String.format("Failed to find suitable parser by '%s' name!", format));
         }
         return parser;
+    }
+
+    @Nullable
+    public String getTransform() {
+        return transform;
     }
 
     @NotNull

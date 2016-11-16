@@ -108,6 +108,20 @@
 </tr>
 
 <tr>
+    <th><label>JSON transformation:</label></th>
+    <td>
+        <div class="completionIconWrapper">
+            <props:multilineProperty name="transform" linkTitle="JSON transformation"
+                                     cols="60" rows="3" className="longField autocompletionProperty"
+                                     expanded="false"/>
+        </div>
+        <span class="smallNote">Enter here required json transformation that should be applied.
+            You can read official documentation for <a target="_blank" href="https://github.com/bazaarvoice/jolt">jolt</a>
+            or test it on the <a target="_blank" href="http://jolt-demo.appspot.com">demo</a> site.</span>
+    </td>
+</tr>
+
+<tr>
     <th><label for="multiple">Allow multiple:<l:star/></label></th>
     <td>
         <props:checkboxProperty name="multiple"/>
@@ -152,6 +166,7 @@
             this.expandPayload();
 
             this.expandHeaders();
+            this.expandTransformation();
 
             this.addAutocomplete();
             this.advancedSettingsToggle();
@@ -205,6 +220,11 @@
         expandHeaders: function () {
             if ($j('#headers').val()) {
                 BS.MultilineProperties.setVisible('headers', true);
+            }
+        },
+        expandTransformation: function () {
+            if ($j('#transform').val()) {
+                BS.MultilineProperties.setVisible('transform', true);
             }
         }
     };

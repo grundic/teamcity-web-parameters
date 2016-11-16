@@ -79,6 +79,12 @@ Also there is `processes_web_server.py` script, which can be used to demonstrate
 processes on a host machine and uses name/pid for key/value. Please note, that it uses `psutil` library, so you migth need to
 install it: ```pip install psutil```.
 
+Sometimes it's not possible to provide data in required format, for example if you would like to get JSON produced by
+external service. In this case you can configure JSON transformation, which should convert some JSON data to format,
+expected by plugin. The transformation is handled by external library (jolt)[https://github.com/bazaarvoice/jolt]. You
+can have a look at their examples to get better understanding how to write required transformation. Also there is a 
+(demo)[http://jolt-demo.appspot.com/], where you can try convert your data without need to run any application.
+
 Configuration
 -------------
 After plugin is installed and web-service is functioning, you can start using it.
@@ -101,6 +107,7 @@ Configuration options description
 | Headers | List of headers to send to the server. Every header should be on a new line and separated with colon: `header-name: header-value`. |
 | Basic Authorization | It's possible to configure basic authorisation for server with options. In this case, provide username and password to corresponding fields. Please note, that currently it's not possible to mask password in this window, so it would be visible on a screen. |
 | Response format | Expected response format from the server. Could be one of `json` and `xml`. |
+| JSON transformation | Set JSON transformation that should be applied to the fetched JSON. |
 | Allow multiple | Flag for configuring select component: if checked, user could select multiple values from drop box, which would be separated by given separator. |
 | Value separator | Separator to use for multiple options. But default `,` would be used. |
 | Tag support | Flag for configuring select component: if checked, it would be possible to enter new values into the drop box. |

@@ -1,5 +1,7 @@
 package ru.mail.teamcity.web.parameters.manager;
 
+import com.bazaarvoice.jolt.Chainr;
+import com.bazaarvoice.jolt.JsonUtils;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.text.StringUtil;
 import org.apache.commons.io.IOUtils;
@@ -24,6 +26,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,6 +90,8 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             return Options.empty();
         }
 
+        content = transform(content, configuration);
+
         options = configuration.getParser().parse(content, errors);
         request.releaseConnection();
 
@@ -105,6 +110,20 @@ public class WebOptionsManagerImpl implements WebOptionsManager {
             return request;
         } else {
             throw new IllegalArgumentException(String.format("Request method got unexpected value '%s'!", configuration.getMethod().name()));
+        }
+    }
+
+    @NotNull
+    private InputStream transform(@NotNull InputStream content, @NotNull RequestConfiguration configuration) {
+        if (StringUtil.isNotEmpty(configuration.getTransform())) {
+            List chainrSpecJSON = JsonUtils.jsonToList(configuration.getTransform());
+            Chainr chainr = Chainr.fromSpec(chainrSpecJSON);
+            Object inputJSON = JsonUtils.jsonToObject(content);
+            Object transformedOutput = chainr.transform(inputJSON);
+
+            return new ByteArrayInputStream(JsonUtils.toJsonString(transformedOutput).getBytes(StandardCharsets.UTF_8));
+        } else {
+            return content;
         }
     }
 

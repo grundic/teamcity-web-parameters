@@ -31,6 +31,8 @@ public class Constants {
     @NotNull
     public final static String FORMAT_PARAMETER = "format";
     @NotNull
+    public final static String TRANSFORM_PARAMETER = "transform";
+    @NotNull
     public final static String MULTIPLE_PARAMETER = "multiple";
     @NotNull
     public final static String MULTIPLE_SEPARATOR_PARAMETER = "multipleSeparator";
