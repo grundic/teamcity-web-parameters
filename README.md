@@ -81,9 +81,9 @@ install it: ```pip install psutil```.
 
 Sometimes it's not possible to provide data in required format, for example if you would like to get JSON produced by
 external service. In this case you can configure JSON transformation, which should convert some JSON data to format,
-expected by plugin. The transformation is handled by external library (jolt)[https://github.com/bazaarvoice/jolt]. You
+expected by plugin. The transformation is handled by external library [jolt](https://github.com/bazaarvoice/jolt). You
 can have a look at their examples to get better understanding how to write required transformation. Also there is a 
-(demo)[http://jolt-demo.appspot.com/], where you can try convert your data without need to run any application.
+[demo](http://jolt-demo.appspot.com), where you can try convert your data without need to run any application.
 
 Configuration
 -------------
